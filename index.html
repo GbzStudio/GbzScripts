@@ -6,61 +6,39 @@
   <title>GbzScripts — Pro X</title>
   <meta name="description" content="GbzScripts Pro X — interface moderna, login (Email + Google), Firebase Realtime DB, catálogo de scripts, diagnósticos e sistema anti-bugs." />
   <meta name="color-scheme" content="dark light">
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     :root{
       --bg-1:#071428;--bg-2:#08162b;--card:#0b2133;--muted:rgba(230,240,255,0.7);--accent1:#7c5cff;--accent2:#3dd3ff;--glass:rgba(255,255,255,0.03);
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;color:#e7f1ff;background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 100%);-webkit-font-smoothing:antialiased}
-
-    /* Container */
     .wrap{max-width:1200px;margin:28px auto;display:grid;grid-template-columns:320px 1fr;gap:22px}
-
-    /* SIDEBAR */
     aside.sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(2,6,23,0.6);min-height:760px;display:flex;flex-direction:column;justify-content:space-between}
     .brand{display:flex;gap:12px;align-items:center}
     .logo{width:58px;height:58px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900;color:#021428;font-size:20px}
     h1.title{font-size:18px;margin:0}
     p.subtitle{margin:2px 0 0;font-size:12px;color:var(--muted)}
-
     nav.menu{margin-top:16px;display:flex;flex-direction:column;gap:8px}
     button.menu-btn{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:transparent;border:none;color:inherit;text-align:left;cursor:pointer;font-weight:700}
     button.menu-btn:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
     button.menu-btn.active{background:linear-gradient(90deg,#103b66,#0b2b4c)}
-
     .meta{font-size:12px;color:var(--muted);margin-top:14px}
-
-    /* MAIN */
     main.panel{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);min-height:760px}
-
     .top{display:flex;justify-content:space-between;align-items:center}
     .search{flex:1;margin-left:14px}
     .search input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit}
-
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
     .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
     .card h3{margin:0 0 8px 0}
     .muted{color:var(--muted);font-size:13px}
-
     .code{font-family:JetBrains Mono,monospace;background:rgba(0,0,0,0.06);padding:8px;border-radius:8px;font-size:13px;white-space:pre-wrap}
-
-    /* Forms */
     .input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02);color:inherit}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
     .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021428}
     .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
-
-    /* Log area */
     .log-area{height:220px;overflow:auto;background:rgba(0,0,0,0.06);padding:12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:12px}
-
-    /* Responsive */
     @media (max-width:980px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
-
-    /* small helpers */
     .flex{display:flex;align-items:center;gap:8px}
     .right{margin-left:auto}
     .tag{padding:6px 8px;border-radius:999px;background:var(--glass);font-weight:700}
@@ -253,93 +231,191 @@
   </div>
 
   <script>
-    /*************** Config (mantido) ***************/
+    /*************** CONFIG (substitua as credenciais se quiser) ***************/
     const hash_config = { algorithm: 'SCRYPT', base64_signer_key: 'rvFvAj6xFNxBOTzmbjuk4FdDz5btzfPFIVNYdotfY7moes/lEFzF35stNcDwCxkuRy+mlem5rTfm5e+DgsGy7A==', base64_salt_separator: 'Bw==', rounds: 8, mem_cost: 14 };
+    // Google Client ID (já fornecido por você, mantido aqui)
     const GOOGLE_CLIENT_ID = '873308453565-kccd4pmdru85pp0iiii9n807o72rnr64.apps.googleusercontent.com';
-    const firebaseConfig = { apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc", authDomain: "fir-auth-3521c.firebaseapp.com", databaseURL: "https://fir-auth-3521c-default-rtdb.firebaseio.com", projectId: "fir-auth-3521c", storageBucket: "fir-auth-3521c.firebasestorage.app", messagingSenderId: "873308453565", appId: "1:873308453565:web:4ff8d9863adb1eae1c95d4", measurementId: "G-LWMZJ55W7N" };
+    // >>> Substitua este firebaseConfig pelo do seu projeto no console Firebase:
+    const firebaseConfig = {
+      apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc",
+      authDomain: "fir-auth-3521c.firebaseapp.com",
+      databaseURL: "https://fir-auth-3521c-default-rtdb.firebaseio.com",
+      projectId: "fir-auth-3521c",
+      storageBucket: "fir-auth-3521c.firebasestorage.app",
+      messagingSenderId: "873308453565",
+      appId: "1:873308453565:web:4ff8d9863adb1eae1c95d4",
+      measurementId: "G-LWMZJ55W7N"
+    };
 
-    /*************** Initialize Firebase (compat) ***************/
-    // compat mode keeps this single-file simple for deployment to GitHub Pages
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const database = firebase.database();
+    /*************** Carrega libs externamente (compat mode) ***************/
+    (function loadExternal(){
+      const libs = [
+        "https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js",
+        "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js",
+        "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"
+      ];
+      libs.forEach(src=>{
+        const s = document.createElement('script'); s.src = src; document.head.appendChild(s);
+      });
+    })();
 
-    /*************** Utilities ***************/
+    /*************** UTILIDADES GERAIS ***************/
     const Util = (function(){
       function _pushLog(line){ try{ const arr = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); arr.unshift(line); if(arr.length>1500) arr.splice(1500); localStorage.setItem('__gbz_logs', JSON.stringify(arr)); }catch(e){} }
-      function log(...args){ const s = args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' '); const line = (new Date()).toLocaleString() + ' — ' + s; _pushLog(line); const mini = document.getElementById('miniLog'); if(mini) mini.textContent = line + '
-' + mini.textContent; const full = document.getElementById('fullLog'); if(full) full.textContent = line + '
-' + full.textContent; try{ const errArr = JSON.parse(localStorage.getItem('__gbz_errors')||'[]'); document.getElementById('statErrors').textContent = errArr.length; }catch(e){} if(document.getElementById('flagVerbose') && document.getElementById('flagVerbose').checked) console.debug(...args); }
+      function log(...args){ const s = args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' '); const line = (new Date()).toLocaleString() + ' — ' + s; _pushLog(line); const mini = document.getElementById('miniLog'); if(mini) mini.textContent = line + '\n' + mini.textContent; const full = document.getElementById('fullLog'); if(full) full.textContent = line + '\n' + full.textContent; try{ const errArr = JSON.parse(localStorage.getItem('__gbz_errors')||'[]'); document.getElementById('statErrors').textContent = errArr.length; }catch(e){} if(document.getElementById('flagVerbose') && document.getElementById('flagVerbose').checked) console.debug(...args); }
       function now(){ return Date.now(); }
-      function sanitizeKey(k){ return String(k).replace(/\.|\#|\$|\[|\]/g, '_'); }
+      function sanitizeKey(k){ return String(k).replace(/[.#$[\]]/g, '_'); }
       function debounce(fn, ms){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }}
       async function retry(fn, attempts=3, baseDelay=300){ let a=0; while(true){ try{ return await fn(); }catch(e){ a++; if(a>=attempts) throw e; await new Promise(r=>setTimeout(r, baseDelay*Math.pow(2,a))); }} }
       function uuid(){ return 'id-'+Math.random().toString(36).slice(2,10); }
       return {log, now, sanitizeKey, debounce, retry, uuid};
     })();
 
-    /*************** Global error handlers (Anti-bug) ***************/
-    window.addEventListener('error', function(ev){ const payload = {type:'error', message:ev.message, file:ev.filename, lineno:ev.lineno, col:ev.colno, stack: ev.error?ev.error.stack:null, ts:Util.now()}; localStorage.setItem('__gbz_last_error', JSON.stringify(payload)); Util.log('GlobalError', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Erro: ' + ev.message; });
-    window.addEventListener('unhandledrejection', function(ev){ const payload = {type:'unhandledrejection', reason:String(ev.reason), ts:Util.now()}; Util.log('UnhandledRejection', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Promise rejeitada: ' + String(ev.reason).slice(0,200); });
-
-    // Watchdog: health checks and auto-recovery heuristics
-    setInterval(()=>{ try{ Util.log('Watchdog ping'); database.ref('.info/connected').once('value').then(snap=>{ const c = snap.val(); const el = document.getElementById('statDB'); if(el) el.textContent = c ? 'Conectado' : 'Desconectado'; }).catch(e=>{ Util.log('watchdogDB', e); }); }catch(e){ Util.log('watchdogErr', e); } }, 45000);
-
-    /*************** Scrypt helpers ***************/
+    /*************** Helpers: base64 / scrypt wrapper ***************/
     function base64ToUint8Array(b64){ const bin = atob(b64); const arr = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i); return arr; }
-    async function derivePasswordKey(password, saltBase64=null){ try{ const pw = new TextEncoder().encode(password); let salt; if(saltBase64) salt = base64ToUint8Array(saltBase64); else salt = crypto.getRandomValues(new Uint8Array(16)); const N = Math.pow(2, Math.max(1, hash_config.mem_cost || 14)); const r = 8; const p = Math.max(1, hash_config.rounds || 1); const dkLen = 64; return await new Promise((resolve,reject)=>{ scrypt(pw, salt, N, r, p, dkLen, function(err, progress, key){ if(err) return reject(err); if(key){ const b64 = btoa(String.fromCharCode.apply(null, Array.from(key))); const saltB64 = btoa(String.fromCharCode.apply(null, Array.from(salt))); resolve({derivedKeyBase64: b64, saltBase64: saltB64}); } }); }); }catch(e){ Util.log('deriveErr', e); throw e; } }
+    async function derivePasswordKey(password, saltBase64=null){
+      if(!window.scrypt) throw new Error('scrypt-js não carregado ainda');
+      const pw = new TextEncoder().encode(password);
+      let salt;
+      if(saltBase64) salt = base64ToUint8Array(saltBase64);
+      else salt = crypto.getRandomValues(new Uint8Array(16));
+      const N = Math.pow(2, Math.max(1, hash_config.mem_cost || 14));
+      const r = 8; const p = Math.max(1, hash_config.rounds || 1); const dkLen = 64;
+      return await new Promise((resolve,reject)=>{ scrypt(pw, salt, N, r, p, dkLen, function(err, progress, key){ if(err) return reject(err); if(key){ const b64 = btoa(String.fromCharCode.apply(null, Array.from(key))); const saltB64 = btoa(String.fromCharCode.apply(null, Array.from(salt))); resolve({derivedKeyBase64: b64, saltBase64: saltB64}); } }); });
+    }
 
-    /*************** Auth flows (functional) ***************/
-    async function handleRegister(){ try{ const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||''); if(!email||!password) return alert('Preencha email e senha.'); const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password); const userCred = await Util.retry(()=>auth.createUserWithEmailAndPassword(email, derivedKeyBase64), 3, 500); const user = userCred.user; await database.ref('users/'+Util.sanitizeKey(user.uid)).set({email, createdAt:Util.now(), salt: saltBase64, derivedKeyPreview: derivedKeyBase64.slice(0,24)+'...'}); Util.log('UserRegistered', {uid:user.uid, email}); alert('Conta criada com sucesso!'); }catch(err){ Util.log('registerErr', err); alert('Erro ao registrar: ' + (err.message||err)); } }
+    /*************** Inicializa Firebase após libs carregarem ***************/
+    function waitForFirebaseInit(cb, timeout=8000){
+      const start = Date.now();
+      (function check(){
+        if(window.firebase && firebase.initializeApp){
+          try{ firebase.initializeApp(firebaseConfig); cb(null); return; }catch(e){ cb(e); return; }
+        }
+        if(Date.now()-start > timeout){ cb(new Error('timeout')); return; }
+        setTimeout(check, 150);
+      })();
+    }
 
-    async function handleSignIn(){ try{ const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||''); if(!email||!password) return alert('Preencha email e senha.'); const snap = await database.ref('users').orderByChild('email').equalTo(email).once('value'); let saltB64 = null; snap.forEach(child=>{ const v=child.val(); if(v && v.salt) saltB64 = v.salt; }); if(!saltB64) return alert('Conta não encontrada no DB. Registre antes.'); const {derivedKeyBase64} = await derivePasswordKey(password, saltB64); await Util.retry(()=>auth.signInWithEmailAndPassword(email, derivedKeyBase64), 3, 500); Util.log('UserSignedIn', {email}); }catch(err){ Util.log('signinErr', err); alert('Erro ao logar: ' + (err.message||err)); } }
+    /*************** Fluxos de autenticação (funcionais) ***************/
+    async function handleRegister(){
+      try{
+        const authEl = window._gbz_auth; const db = window._gbz_db;
+        if(!authEl) return alert('Sistema ainda inicializando (Firebase). Aguarde alguns segundos e tente novamente.');
+        const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||'');
+        if(!email||!password) return alert('Preencha email e senha.');
+        const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
+        const userCred = await Util.retry(()=>authEl.createUserWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
+        const user = userCred.user;
+        await db.ref('users/'+Util.sanitizeKey(user.uid)).set({email, createdAt:Util.now(), salt: saltBase64, derivedKeyPreview: derivedKeyBase64.slice(0,24)+'...'});
+        Util.log('UserRegistered',{uid:user.uid,email});
+        alert('Conta criada com sucesso!');
+      }catch(err){ Util.log('registerErr', err); alert('Erro ao registrar: '+(err.message||err)); }
+    }
 
-    async function signInWithGoogle(){ try{ const provider = new firebase.auth.GoogleAuthProvider(); await auth.signInWithPopup(provider); Util.log('GoogleSignIn'); }catch(err){ Util.log('googleErr', err); alert('Erro no login com Google: ' + (err.message||err)); } }
+    async function handleSignIn(){
+      try{
+        const authEl = window._gbz_auth; const db = window._gbz_db;
+        if(!authEl) return alert('Sistema ainda inicializando (Firebase). Aguarde alguns segundos e tente novamente.');
+        const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||'');
+        if(!email||!password) return alert('Preencha email e senha.');
+        const snap = await db.ref('users').orderByChild('email').equalTo(email).once('value');
+        let saltB64 = null; snap.forEach(child=>{ const v=child.val(); if(v && v.salt) saltB64 = v.salt; });
+        if(!saltB64) return alert('Conta não encontrada no DB. Registre antes.');
+        const {derivedKeyBase64} = await derivePasswordKey(password, saltB64);
+        await Util.retry(()=>authEl.signInWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
+        Util.log('UserSignedIn',{email});
+      }catch(err){ Util.log('signinErr', err); alert('Erro ao logar: '+(err.message||err)); }
+    }
 
-    function signOut(){ auth.signOut().then(()=>{ Util.log('SignedOut'); alert('Desconectado'); }).catch(e=>{ Util.log('signOutErr', e); }); }
+    async function signInWithGoogle(){
+      try{
+        const authEl = window._gbz_auth;
+        if(!authEl) return alert('Sistema ainda inicializando (Firebase).');
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await authEl.signInWithPopup(provider);
+        Util.log('GoogleSignIn');
+      }catch(err){ Util.log('googleErr', err); alert('Erro no login com Google: '+(err.message||err)); }
+    }
 
-    auth.onAuthStateChanged(user=>{ document.getElementById('accountShort').textContent = user ? (user.email || user.displayName || ('uid:'+user.uid.slice(0,8))) : '— desconectado —'; const profileEl = document.getElementById('profileEmail'); if(profileEl) profileEl.textContent = user ? (user.email || '—') : '—'; const welcomeName = document.getElementById('welcomeName'); if(welcomeName) welcomeName.textContent = user ? (user.displayName || user.email.split('@')[0]) : 'convidado'; if(user) loadUsersPreview(); });
+    function signOut(){ if(window._gbz_auth) window._gbz_auth.signOut().then(()=>{ Util.log('SignedOut'); alert('Desconectado'); }).catch(e=>{ Util.log('signOutErr', e); }); }
 
-    /*************** Scripts CRUD (functional) ***************/
-    async function addScript(){ try{ const title = (document.getElementById('scriptTitle').value||'').trim(); const code = (document.getElementById('scriptCode').value||'').trim(); if(!title||!code) return alert('Preencha título e código.'); const id = Util.uuid(); const payload = {id, title, code, createdAt:Util.now()}; await Util.retry(()=>database.ref('scripts/'+Util.sanitizeKey(id)).set(payload), 3, 400); Util.log('ScriptAdded', payload); document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; loadScripts(); }catch(err){ Util.log('addScriptErr', err); alert('Erro ao adicionar script: ' + (err.message||err)); } }
+    function bindAuthState(){
+      if(!window._gbz_auth) return;
+      window._gbz_auth.onAuthStateChanged(user=>{
+        document.getElementById('accountShort').textContent = user ? (user.email || user.displayName || ('uid:'+user.uid.slice(0,8))) : '— desconectado —';
+        const profileEl = document.getElementById('profileEmail'); if(profileEl) profileEl.textContent = user ? (user.email || '—') : '—';
+        const welcomeName = document.getElementById('welcomeName'); if(welcomeName) welcomeName.textContent = user ? (user.displayName || user.email.split('@')[0]) : 'convidado';
+        if(user) loadUsersPreview();
+      });
+    }
+
+    /*************** Scripts CRUD (funcional) ***************/
+    async function addScript(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const title = (document.getElementById('scriptTitle').value||'').trim(); const code = (document.getElementById('scriptCode').value||'').trim(); if(!title||!code) return alert('Preencha título e código.'); const id = Util.uuid(); const payload = {id, title, code, createdAt:Util.now()}; await Util.retry(()=>db.ref('scripts/'+Util.sanitizeKey(id)).set(payload), 3, 400); Util.log('ScriptAdded', payload); document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; loadScripts(); }catch(err){ Util.log('addScriptErr', err); alert('Erro ao adicionar script: '+(err.message||err)); } }
     function clearScriptForm(){ document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; }
 
-    async function loadScripts(){ try{ const snap = await database.ref('scripts').orderByChild('createdAt').limitToFirst(100).once('value'); const val = snap.val(); const list = document.getElementById('scriptList'); const catalog = document.getElementById('catalog'); if(!val){ if(list) list.innerHTML = '<div class="muted">Sem scripts</div>'; if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; } const rows = Object.keys(val).map(k=>val[k]).sort((a,b)=>b.createdAt-a.createdAt); if(list) list.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div><pre class="code">${escapeHtml(r.code)}</pre></div>`).join(''); if(catalog) catalog.innerHTML = rows.slice(0,8).map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.01)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); }catch(e){ Util.log('loadScriptsErr', e); } }
+    async function loadScripts(){ try{ const db = window._gbz_db; if(!db) return; const snap = await db.ref('scripts').orderByChild('createdAt').limitToFirst(200).once('value'); const val = snap.val(); const list = document.getElementById('scriptList'); const catalog = document.getElementById('catalog'); if(!val){ if(list) list.innerHTML = '<div class="muted">Sem scripts</div>'; if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; } const rows = Object.keys(val).map(k=>val[k]).sort((a,b)=>b.createdAt-a.createdAt); if(list) list.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div><pre class="code">${escapeHtml(r.code)}</pre></div>`).join(''); if(catalog) catalog.innerHTML = rows.slice(0,8).map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.01)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); }catch(e){ Util.log('loadScriptsErr', e); } }
 
-    /*************** DB Helpers ***************/
-    async function loadUsersPreview(){ try{ const snap = await database.ref('users').once('value'); const val = snap.val(); const el = document.getElementById('usersPreview'); if(!val){ if(el) el.innerHTML = '<div class="muted">Nenhum usuário salvo.</div>'; document.getElementById('statUsers').textContent = '0'; return; } const rows = Object.keys(val).map(k=>val[k]); if(el) el.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.email||'—')}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); document.getElementById('statUsers').textContent = rows.length; }catch(e){ Util.log('loadUsersPreviewErr', e); } }
+    /*************** DB helpers ***************/
+    async function loadUsersPreview(){ try{ const db = window._gbz_db; if(!db) return; const snap = await db.ref('users').once('value'); const val = snap.val(); const el = document.getElementById('usersPreview'); if(!val){ if(el) el.innerHTML = '<div class="muted">Nenhum usuário salvo.</div>'; document.getElementById('statUsers').textContent = '0'; return; } const rows = Object.keys(val).map(k=>val[k]); if(el) el.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.email||'—')}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); document.getElementById('statUsers').textContent = rows.length; }catch(e){ Util.log('loadUsersPreviewErr', e); } }
 
-    async function writeTestValue(){ try{ const k = (document.getElementById('dbKey').value||'').trim(); const v = (document.getElementById('dbValue').value||'').trim(); if(!k) return alert('Informe chave'); await Util.retry(()=>database.ref('tests/'+Util.sanitizeKey(k)).set({value:v, createdAt:Util.now()}), 3, 400); Util.log('TestWrite',{k,v}); alert('Gravado com sucesso'); }catch(e){ Util.log('writeTestErr', e); alert('Erro ao gravar: ' + (e.message||e)); } }
-    async function readTestValue(){ try{ const k = (document.getElementById('dbKey').value||'').trim(); if(!k) return alert('Informe chave'); const snap = await database.ref('tests/'+Util.sanitizeKey(k)).once('value'); alert('Valor: ' + JSON.stringify(snap.val())); }catch(e){ Util.log('readTestErr', e); alert('Erro ao ler: ' + (e.message||e)); } }
+    async function writeTestValue(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const k = (document.getElementById('dbKey').value||'').trim(); const v = (document.getElementById('dbValue').value||'').trim(); if(!k) return alert('Informe chave'); await Util.retry(()=>db.ref('tests/'+Util.sanitizeKey(k)).set({value:v, createdAt:Util.now()}), 3, 400); Util.log('TestWrite',{k,v}); alert('Gravado com sucesso'); }catch(e){ Util.log('writeTestErr', e); alert('Erro ao gravar: ' + (e.message||e)); } }
+    async function readTestValue(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const k = (document.getElementById('dbKey').value||'').trim(); if(!k) return alert('Informe chave'); const snap = await db.ref('tests/'+Util.sanitizeKey(k)).once('value'); alert('Valor: ' + JSON.stringify(snap.val())); }catch(e){ Util.log('readTestErr', e); alert('Erro ao ler: ' + (e.message||e)); } }
 
     /*************** Diagnostics ***************/
-    async function runDiagnostics(){ const lines = []; try{ lines.push('Diagnostics — ' + new Date().toLocaleString()); lines.push('Navigator.onLine: ' + navigator.onLine); const connSnap = await database.ref('.info/connected').once('value'); lines.push('Firebase connected: ' + Boolean(connSnap.val())); try{ await Promise.race([database.ref('/').limitToFirst(1).once('value'), new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))]); lines.push('Root read: OK'); }catch(e){ lines.push('Root read: FAIL ('+e.message+')'); } const logs = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); lines.push('Local logs: ' + logs.length); }catch(e){ lines.push('Diagnostics error: ' + (e.message||e)); } const el = document.getElementById('diagReport'); if(el) el.textContent = lines.join('
-'); Util.log('Diagnostics', lines); alert('Diagnóstico concluído — veja a aba Diagnósticos.'); }
+    async function runDiagnostics(){ const lines = []; try{ lines.push('Diagnostics — ' + new Date().toLocaleString()); lines.push('Navigator.onLine: ' + navigator.onLine); const db = window._gbz_db; if(db){ const connSnap = await db.ref('.info/connected').once('value'); lines.push('Firebase connected: ' + Boolean(connSnap.val())); try{ await Promise.race([db.ref('/').limitToFirst(1).once('value'), new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))]); lines.push('Root read: OK'); }catch(e){ lines.push('Root read: FAIL ('+e.message+')'); } } else { lines.push('Firebase not initialized yet'); } const logs = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); lines.push('Local logs: ' + logs.length); }catch(e){ lines.push('Diagnostics error: ' + (e.message||e)); } const el = document.getElementById('diagReport'); if(el) el.textContent = lines.join('\n'); Util.log('Diagnostics', lines); alert('Diagnóstico concluído — veja a aba Diagnósticos.'); }
 
     /*************** Bug reporter ***************/
-    async function submitBug(){ try{ const title = (document.getElementById('bugTitle').value||'').trim(); const desc = (document.getElementById('bugDesc').value||'').trim(); if(!title||!desc) return alert('Preencha título e descrição'); const id = Util.uuid(); const payload = {id, title, desc, ts:Util.now(), user: auth.currentUser?auth.currentUser.uid:null, email: auth.currentUser?auth.currentUser.email:null}; await Util.retry(()=>database.ref('bug_reports/'+Util.sanitizeKey(id)).set(payload), 3, 600); Util.log('BugSubmitted', payload); alert('Bug enviado, obrigado!'); clearBugForm(); }catch(e){ Util.log('submitBugErr', e); alert('Erro ao enviar bug: ' + (e.message||e)); } }
+    async function submitBug(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const title = (document.getElementById('bugTitle').value||'').trim(); const desc = (document.getElementById('bugDesc').value||'').trim(); if(!title||!desc) return alert('Preencha título e descrição'); const id = Util.uuid(); const payload = {id, title, desc, ts:Util.now(), user: (window._gbz_auth && _gbz_auth.currentUser)?_gbz_auth.currentUser.uid:null, email: (window._gbz_auth && _gbz_auth.currentUser)?_gbz_auth.currentUser.email:null}; await Util.retry(()=>db.ref('bug_reports/'+Util.sanitizeKey(id)).set(payload), 3, 600); Util.log('BugSubmitted', payload); alert('Bug enviado, obrigado!'); clearBugForm(); }catch(e){ Util.log('submitBugErr', e); alert('Erro ao enviar bug: ' + (e.message||e)); } }
     function clearBugForm(){ document.getElementById('bugTitle').value=''; document.getElementById('bugDesc').value=''; }
 
     /*************** Logs utils ***************/
-    function clearLogs(){ localStorage.removeItem('__gbz_logs'); const el = document.getElementById('fullLog'); if(el) el.textContent = ''; alert('Logs limpos'); }
+    function clearLogs(){ localStorage.removeItem('__gbz_logs'); const el = document.getElementById('fullLog'); if(el) el.textContent=''; alert('Logs limpos'); }
     function downloadLogs(){ const data = localStorage.getItem('__gbz_logs')||'[]'; const blob = new Blob([data],{type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'gbz_logs_'+Date.now()+'.json'; a.click(); URL.revokeObjectURL(url); }
     function exportLogs(){ downloadLogs(); }
     function clearLocalCache(){ localStorage.clear(); alert('Cache limpo'); }
 
     /*************** Search (live, debounced) ***************/
-    const searchInput = document.getElementById('search'); if(searchInput) searchInput.addEventListener('input', Util.debounce(async function(){ const q = (this.value||'').trim().toLowerCase(); try{ const snap = await database.ref('scripts').once('value'); const val = snap.val(); const catalog = document.getElementById('catalog'); if(!val){ if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; } const rows = Object.keys(val).map(k=>val[k]); const filtered = rows.filter(r=> (r.title||'').toLowerCase().includes(q) || (r.code||'').toLowerCase().includes(q)); if(catalog) catalog.innerHTML = filtered.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join('') || '<div class="muted">Nenhum resultado</div>'; }catch(e){ Util.log('searchErr', e); } }, 300));
+    (function bindSearch(){
+      const el = document.getElementById('search');
+      if(!el) return;
+      el.addEventListener('input', Util.debounce(async function(){
+        const q = (this.value||'').trim().toLowerCase();
+        try{
+          const db = window._gbz_db; if(!db) return;
+          const snap = await db.ref('scripts').once('value'); const val = snap.val();
+          const catalog = document.getElementById('catalog');
+          if(!val){ if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; }
+          const rows = Object.keys(val).map(k=>val[k]);
+          const filtered = rows.filter(r=> (r.title||'').toLowerCase().includes(q) || (r.code||'').toLowerCase().includes(q));
+          if(catalog) catalog.innerHTML = filtered.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join('') || '<div class="muted">Nenhum resultado</div>';
+        }catch(e){ Util.log('searchErr', e); }
+      }, 300));
+    })();
 
-    /*************** Navigation binding ***************/
+    /*************** Navigation ***************/
     document.querySelectorAll('button.menu-btn').forEach(btn=>btn.addEventListener('click', (e)=>{ document.querySelectorAll('button.menu-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const v = btn.getAttribute('data-view'); showView(v); }));
     function showView(id){ document.querySelectorAll('.view').forEach(v=>v.style.display='none'); const el = document.getElementById('view-'+id); if(el) el.style.display='block'; }
     function navTo(view){ const btn = document.querySelector(`button.menu-btn[data-view="${view}"]`); if(btn) btn.click(); else showView(view); }
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m]; }); }
 
-    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;"})[m]; }); }
+    /*************** Init: wait Firebase then bind ***************/
+    waitForFirebaseInit(function(err){
+      if(err) { Util.log('firebaseInitErr', err); console.warn('Firebase init timeout or error:', err); }
+      try{
+        window._gbz_auth = firebase.auth();
+        window._gbz_db = firebase.database();
+        bindAuthState();
+        loadScripts();
+        loadUsersPreview();
+        Util.log('GbzSite ready');
+        setInterval(()=>{ loadScripts(); loadUsersPreview(); }, 60000);
+      }catch(e){ Util.log('postInitErr', e); }
+    }, 10000);
 
-    /*************** Init ***************/
-    (function init(){ showView('home'); loadScripts(); loadUsersPreview(); document.getElementById('lastSync')?.textContent = new Date().toLocaleString(); Util.log('GbzScriptsProX initialized'); // auto refresh simple
-      setInterval(()=>{ loadScripts(); loadUsersPreview(); }, 60000);
-    })();
+    /*************** Global error handlers (Anti-bug) ***************/
+    window.addEventListener('error', function(ev){ const payload = {type:'error', message:ev.message, file:ev.filename, lineno:ev.lineno, col:ev.colno, stack: ev.error?ev.error.stack:null, ts:Util.now()}; localStorage.setItem('__gbz_last_error', JSON.stringify(payload)); Util.log('GlobalError', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Erro: ' + ev.message; });
+    window.addEventListener('unhandledrejection', function(ev){ const payload = {type:'unhandledrejection', reason:String(ev.reason), ts:Util.now()}; Util.log('UnhandledRejection', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Promise rejeitada: ' + String(ev.reason).slice(0,200); });
   </script>
 </body>
 </html>

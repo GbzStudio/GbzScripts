@@ -1,421 +1,656 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GbzScripts — Pro X</title>
-  <meta name="description" content="GbzScripts Pro X — interface moderna, login (Email + Google), Firebase Realtime DB, catálogo de scripts, diagnósticos e sistema anti-bugs." />
-  <meta name="color-scheme" content="dark light">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg-1:#071428;--bg-2:#08162b;--card:#0b2133;--muted:rgba(230,240,255,0.7);--accent1:#7c5cff;--accent2:#3dd3ff;--glass:rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;color:#e7f1ff;background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 100%);-webkit-font-smoothing:antialiased}
-    .wrap{max-width:1200px;margin:28px auto;display:grid;grid-template-columns:320px 1fr;gap:22px}
-    aside.sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(2,6,23,0.6);min-height:760px;display:flex;flex-direction:column;justify-content:space-between}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:58px;height:58px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900;color:#021428;font-size:20px}
-    h1.title{font-size:18px;margin:0}
-    p.subtitle{margin:2px 0 0;font-size:12px;color:var(--muted)}
-    nav.menu{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-    button.menu-btn{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:transparent;border:none;color:inherit;text-align:left;cursor:pointer;font-weight:700}
-    button.menu-btn:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
-    button.menu-btn.active{background:linear-gradient(90deg,#103b66,#0b2b4c)}
-    .meta{font-size:12px;color:var(--muted);margin-top:14px}
-    main.panel{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);min-height:760px}
-    .top{display:flex;justify-content:space-between;align-items:center}
-    .search{flex:1;margin-left:14px}
-    .search input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-    .card h3{margin:0 0 8px 0}
-    .muted{color:var(--muted);font-size:13px}
-    .code{font-family:JetBrains Mono,monospace;background:rgba(0,0,0,0.06);padding:8px;border-radius:8px;font-size:13px;white-space:pre-wrap}
-    .input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02);color:inherit}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
-    .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021428}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
-    .log-area{height:220px;overflow:auto;background:rgba(0,0,0,0.06);padding:12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:12px}
-    @media (max-width:980px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
-    .flex{display:flex;align-items:center;gap:8px}
-    .right{margin-left:auto}
-    .tag{padding:6px 8px;border-radius:999px;background:var(--glass);font-weight:700}
-    footer{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GbzScripts — Rede de Shorts (Instagram UI)</title>
+<meta name="description" content="GbzScripts — rede social de scripts e shorts, estilo Instagram + Shorts. Autenticação, upload, feed, perfis e search.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fafafa;--card:#ffffff;--muted:#8e8e8e;--accent:#0095f6;--text:#111;
+    --ig-grad1:#f58529;--ig-grad2:#dd2a7b;--ig-grad3:#8134af;--ig-grad4:#515bd4;
+    --like:#ff2d55;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#050607;--card:#0f1113;--muted:#9aa3b2;--text:#e6eef8}
+  }
+
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;color:var(--text);background:linear-gradient(180deg, var(--bg) 0%, #f3f3f3 100%);-webkit-font-smoothing:antialiased}
+  @media (prefers-color-scheme: dark){ body{background:linear-gradient(180deg,#050607 0%, #0b0c10 100%);} }
+
+  /* App centered grid */
+  .container{max-width:1100px;margin:16px auto;display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;padding:0 12px}
+  @media (max-width:980px){ .container{grid-template-columns:1fr;padding-bottom:90px} .sidebar{display:none} }
+
+  /* Top bar */
+  .topbar{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--ig-grad1),var(--ig-grad2),var(--ig-grad3),var(--ig-grad4));display:flex;align-items:center;justify-content:center;color:white;font-weight:900}
+  .search input{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);width:420px;max-width:360px}
+
+  /* Feed */
+  .feed{display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--card);border-radius:14px;border:1px solid rgba(0,0,0,0.04);overflow:hidden;box-shadow:0 6px 18px rgba(2,6,23,0.03)}
+  .short{position:relative;background:#000;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+  .short video{width:100%;height:560px;object-fit:cover;background:#000}
+  @media (max-width:980px){ .short video{height:72vh} }
+
+  .short-meta{display:flex;gap:12px;padding:12px;align-items:flex-start}
+  .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ig-grad2),var(--ig-grad4));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+  .meta-info{flex:1}
+  .meta-info .user{font-weight:800}
+  .meta-info .desc{color:var(--muted);font-size:14px;margin-top:6px}
+  .actions{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .icon-btn{border:none;background:transparent;cursor:pointer;font-size:20px;padding:6px;border-radius:8px;color:inherit}
+  .count{font-size:12px;color:var(--muted);margin-top:6px}
+  .liked{color:var(--like)}
+
+  /* Sidebar */
+  .sidebar{position:sticky;top:18px;display:flex;flex-direction:column;gap:12px}
+  .profile-mini{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:12px}
+  .profile-mini .name{font-weight:800}
+  .suggestions{padding:12px;background:var(--card);border-radius:12px}
+  .suggest-item{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+
+  /* Modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:var(--card);padding:18px;border-radius:12px;width:92%;max-width:560px;border:1px solid rgba(0,0,0,0.06)}
+  .modal h3{margin:0 0 8px 0}
+  .input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;margin-top:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+  .btn-primary{background:linear-gradient(90deg,var(--ig-grad3),var(--ig-grad4));color:white}
+  .btn-ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:inherit}
+
+  /* Comments */
+  .comments{padding:12px;border-top:1px solid rgba(0,0,0,0.03)}
+  .comment{display:flex;gap:8px;margin-bottom:8px}
+  .c-avatar{width:34px;height:34px;border-radius:50%;background:#cbd5e1}
+  .c-body{flex:1}
+
+  /* mobile bottom nav */
+  .bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:420px;max-width:92%;display:none;background:var(--card);padding:8px;border-radius:999px;justify-content:space-around;box-shadow:0 8px 30px rgba(0,0,0,0.2)}
+  .bottom-nav button{background:transparent;border:none;font-size:20px}
+  @media (max-width:980px){ .bottom-nav{display:flex} .container{grid-template-columns:1fr} .sidebar{display:none} }
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+  .hidden{display:none}
+</style>
 </head>
 <body>
-  <div class="wrap" role="application">
-    <aside class="sidebar" aria-label="Navegação principal">
-      <div>
-        <div class="brand">
-          <div class="logo">Gbz</div>
-          <div>
-            <h1 class="title">GbzScripts Pro X</h1>
-            <p class="subtitle">Interface moderna · Autenticação · Diagnóstico</p>
-          </div>
-        </div>
 
-        <nav class="menu" id="mainMenu">
-          <button class="menu-btn active" data-view="home">🏠 Início</button>
-          <button class="menu-btn" data-view="scripts">📜 Scripts</button>
-          <button class="menu-btn" data-view="auth">🔐 Conta</button>
-          <button class="menu-btn" data-view="db">🗄️ Banco</button>
-          <button class="menu-btn" data-view="diag">🛠 Diagnósticos</button>
-          <button class="menu-btn" data-view="settings">⚙️ Configurações</button>
-        </nav>
-
-        <div class="meta">
-          <div>Versão: <strong>Pro X</strong></div>
-          <div style="margin-top:8px">Status da conta: <span id="accountShort" class="tag">— desconectado —</span></div>
-        </div>
-      </div>
-
-      <footer>
-        <div>Feito por Gbz — Sem funções administrativas</div>
-      </footer>
-    </aside>
-
-    <main class="panel" id="appMain">
-      <!-- HOME -->
-      <section id="view-home" class="view">
-        <div class="top">
-          <div>
-            <h2 id="welcome">Olá, <span id="welcomeName">convidado</span></h2>
-            <div class="muted">Bem-vindo à versão Pro X. Use o menu para navegar — tudo funciona com Firebase.</div>
-          </div>
-          <div class="search"><input id="search" placeholder="Pesquisar scripts..." aria-label="Pesquisar scripts" /></div>
-        </div>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Resumo do Sistema</h3>
-            <div class="muted">Indicadores básicos e links de ação.</div>
-            <div style="display:flex;gap:8px;margin-top:10px">
-              <div style="flex:1"><div class="muted">Usuários</div><div id="statUsers" style="font-weight:800;font-size:20px">—</div></div>
-              <div style="flex:1"><div class="muted">Erros</div><div id="statErrors" style="font-weight:800;font-size:20px">0</div></div>
-              <div style="flex:1"><div class="muted">DB</div><div id="statDB" style="font-weight:800;font-size:20px">—</div></div>
-            </div>
-            <div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-primary" onclick="navTo('auth')">Entrar / Registrar</button><button class="btn btn-ghost" onclick="runDiagnostics()">Executar diagnóstico</button></div>
-          </div>
-
-          <div class="card">
-            <h3>Catálogo</h3>
-            <div class="muted">Scripts mais recentes</div>
-            <div id="catalog" style="margin-top:10px"></div>
-          </div>
-
-          <div class="card">
-            <h3>Logs Rápidos</h3>
-            <div class="log-area" id="miniLog">—</div>
-          </div>
-
-          <div class="card" style="grid-column:span 3">
-            <h3>Sobre</h3>
-            <div class="muted">GbzScripts Pro X é um template funcional para GitHub Pages com autenticação, Realtime DB e ferramentas de diagnóstico. Mantemos a privacidade: sem admin embutido.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SCRIPTS -->
-      <section id="view-scripts" class="view" style="display:none">
-        <h2>Scripts</h2>
-        <div class="muted">Adicione, visualize e pesquise seus scripts.</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div style="flex:1;min-width:320px" class="card">
-            <h3>Adicionar / Atualizar</h3>
-            <input id="scriptTitle" class="input" placeholder="Título" />
-            <textarea id="scriptCode" class="input" placeholder="Código" style="margin-top:8px;min-height:160px"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="addScript()">Salvar</button><button class="btn btn-ghost" onclick="clearScriptForm()">Limpar</button></div>
-          </div>
-
-          <div style="flex:1;min-width:320px" class="card">
-            <h3>Lista</h3>
-            <div id="scriptList" style="margin-top:8px"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- AUTH -->
-      <section id="view-auth" class="view" style="display:none">
-        <h2>Conta</h2>
-        <div class="muted">Login com Email (scrypt) ou Google (OAuth via Firebase).</div>
-        <div class="grid" style="margin-top:12px">
-          <div class="card">
-            <h3>Login / Registro (Email)</h3>
-            <input id="authEmail" class="input" placeholder="email@exemplo.com" />
-            <input id="authPassword" type="password" class="input" placeholder="Senha" style="margin-top:8px" />
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="handleSignIn()">Entrar</button><button class="btn btn-ghost" onclick="handleRegister()">Registrar</button></div>
-            <div class="muted" style="margin-top:8px">A derivação de senha com scrypt é demonstrativa — para produção, use servidor.</div>
-          </div>
-
-          <div class="card">
-            <h3>Login com Google</h3>
-            <div style="display:flex;gap:8px;align-items:center"><button class="btn btn-primary" onclick="signInWithGoogle()">Entrar com Google</button><div class="muted">OAuth via Firebase</div></div>
-          </div>
-
-          <div class="card">
-            <h3>Perfil</h3>
-            <div class="muted">Usuário: <span id="profileEmail">—</span></div>
-            <div style="margin-top:8px"><button class="btn btn-ghost" onclick="signOut()">Sair</button></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DB -->
-      <section id="view-db" class="view" style="display:none">
-        <h2>Banco de Dados</h2>
-        <div class="muted">Ferramentas para testes no Realtime Database.</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:360px">
-            <h3>Usuários</h3>
-            <div id="usersPreview"></div>
-          </div>
-
-          <div class="card" style="flex:1;min-width:320px">
-            <h3>Teste de Escrita</h3>
-            <input id="dbKey" class="input" placeholder="chave" />
-            <input id="dbValue" class="input" placeholder="valor" style="margin-top:8px" />
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="writeTestValue()">Gravar</button><button class="btn btn-ghost" onclick="readTestValue()">Ler</button></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DIAGNOSTICS -->
-      <section id="view-diag" class="view" style="display:none">
-        <h2>Diagnósticos & Anti-Bugs</h2>
-        <div class="muted">Detecta erros, coleta logs e permite enviar relatórios.</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:420px">
-            <h3>Executar Diagnóstico</h3>
-            <div style="margin-top:8px"><button class="btn btn-primary" onclick="runDiagnostics()">Rodar agora</button></div>
-            <pre id="diagReport" class="code" style="margin-top:8px">—</pre>
-          </div>
-
-          <div class="card" style="flex:1;min-width:320px">
-            <h3>Enviar Bug</h3>
-            <input id="bugTitle" class="input" placeholder="Resumo curto" />
-            <textarea id="bugDesc" class="input" placeholder="Descreva o problema" style="margin-top:8px;min-height:120px"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="submitBug()">Enviar</button><button class="btn btn-ghost" onclick="clearBugForm()">Limpar</button></div>
-          </div>
-
-          <div class="card" style="grid-column:span 3">
-            <h3>Logs</h3>
-            <div class="log-area" id="fullLog">—</div>
-            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-ghost" onclick="downloadLogs()">Baixar Logs</button><button class="btn btn-ghost" onclick="clearLogs()">Limpar Logs</button></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SETTINGS -->
-      <section id="view-settings" class="view" style="display:none">
-        <h2>Configurações</h2>
-        <div class="muted">Opções e feature flags.</div>
-        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-          <div class="card" style="flex:1;min-width:320px">
-            <h3>Feature Flags</h3>
-            <label><input type="checkbox" id="flagVerbose" /> Logs verbosos</label><br>
-            <label><input type="checkbox" id="flagRetry" checked /> Auto retry</label><br>
-            <label><input type="checkbox" id="flagOfflineCache" checked /> Cache local (localStorage)</label>
-          </div>
-
-          <div class="card" style="flex:1;min-width:320px">
-            <h3>Utilitários</h3>
-            <div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="exportLogs()">Exportar Logs</button><button class="btn btn-ghost" onclick="clearLocalCache()">Limpar Cache</button></div>
-          </div>
-        </div>
-      </section>
-
-    </main>
+<!-- Topbar -->
+<div class="topbar" style="margin:12px auto;max-width:1100px;padding:12px;">
+  <div class="brand">
+    <div class="logo">Gbz</div>
+    <div style="display:flex;flex-direction:column">
+      <div style="font-weight:900">GbzScripts</div>
+      <div class="muted" style="font-size:12px">Rede de scripts & shorts</div>
+    </div>
   </div>
 
-  <script>
-    /*************** CONFIG (substitua as credenciais se quiser) ***************/
-    const hash_config = { algorithm: 'SCRYPT', base64_signer_key: 'rvFvAj6xFNxBOTzmbjuk4FdDz5btzfPFIVNYdotfY7moes/lEFzF35stNcDwCxkuRy+mlem5rTfm5e+DgsGy7A==', base64_salt_separator: 'Bw==', rounds: 8, mem_cost: 14 };
-    // Google Client ID (já fornecido por você, mantido aqui)
-    const GOOGLE_CLIENT_ID = '873308453565-kccd4pmdru85pp0iiii9n807o72rnr64.apps.googleusercontent.com';
-    // >>> Substitua este firebaseConfig pelo do seu projeto no console Firebase:
-    const firebaseConfig = {
-      apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc",
-      authDomain: "fir-auth-3521c.firebaseapp.com",
-      databaseURL: "https://fir-auth-3521c-default-rtdb.firebaseio.com",
-      projectId: "fir-auth-3521c",
-      storageBucket: "fir-auth-3521c.firebasestorage.app",
-      messagingSenderId: "873308453565",
-      appId: "1:873308453565:web:4ff8d9863adb1eae1c95d4",
-      measurementId: "G-LWMZJ55W7N"
-    };
+  <div style="display:flex;gap:10px;align-items:center">
+    <div class="search"><input id="globalSearch" placeholder="Pesquisar: vídeos, usuários, scripts..." /></div>
+    <button id="uploadBtn" class="btn btn-primary">Enviar</button>
+    <button id="authBtn" class="btn btn-ghost">Entrar</button>
+  </div>
+</div>
 
-    /*************** Carrega libs externamente (compat mode) ***************/
-    (function loadExternal(){
-      const libs = [
-        "https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js",
-        "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js",
-        "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js",
-        "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"
-      ];
-      libs.forEach(src=>{
-        const s = document.createElement('script'); s.src = src; document.head.appendChild(s);
-      });
-    })();
+<!-- App grid -->
+<div class="container" style="max-width:1100px;margin-top:18px;">
 
-    /*************** UTILIDADES GERAIS ***************/
-    const Util = (function(){
-      function _pushLog(line){ try{ const arr = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); arr.unshift(line); if(arr.length>1500) arr.splice(1500); localStorage.setItem('__gbz_logs', JSON.stringify(arr)); }catch(e){} }
-      function log(...args){ const s = args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' '); const line = (new Date()).toLocaleString() + ' — ' + s; _pushLog(line); const mini = document.getElementById('miniLog'); if(mini) mini.textContent = line + '\n' + mini.textContent; const full = document.getElementById('fullLog'); if(full) full.textContent = line + '\n' + full.textContent; try{ const errArr = JSON.parse(localStorage.getItem('__gbz_errors')||'[]'); document.getElementById('statErrors').textContent = errArr.length; }catch(e){} if(document.getElementById('flagVerbose') && document.getElementById('flagVerbose').checked) console.debug(...args); }
-      function now(){ return Date.now(); }
-      function sanitizeKey(k){ return String(k).replace(/[.#$[\]]/g, '_'); }
-      function debounce(fn, ms){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }}
-      async function retry(fn, attempts=3, baseDelay=300){ let a=0; while(true){ try{ return await fn(); }catch(e){ a++; if(a>=attempts) throw e; await new Promise(r=>setTimeout(r, baseDelay*Math.pow(2,a))); }} }
-      function uuid(){ return 'id-'+Math.random().toString(36).slice(2,10); }
-      return {log, now, sanitizeKey, debounce, retry, uuid};
-    })();
+  <!-- FEED -->
+  <div class="feed" id="feedColumn">
+    <!-- feed items injected by JS -->
+  </div>
 
-    /*************** Helpers: base64 / scrypt wrapper ***************/
-    function base64ToUint8Array(b64){ const bin = atob(b64); const arr = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i); return arr; }
-    async function derivePasswordKey(password, saltBase64=null){
-      if(!window.scrypt) throw new Error('scrypt-js não carregado ainda');
-      const pw = new TextEncoder().encode(password);
-      let salt;
-      if(saltBase64) salt = base64ToUint8Array(saltBase64);
-      else salt = crypto.getRandomValues(new Uint8Array(16));
-      const N = Math.pow(2, Math.max(1, hash_config.mem_cost || 14));
-      const r = 8; const p = Math.max(1, hash_config.rounds || 1); const dkLen = 64;
-      return await new Promise((resolve,reject)=>{ scrypt(pw, salt, N, r, p, dkLen, function(err, progress, key){ if(err) return reject(err); if(key){ const b64 = btoa(String.fromCharCode.apply(null, Array.from(key))); const saltB64 = btoa(String.fromCharCode.apply(null, Array.from(salt))); resolve({derivedKeyBase64: b64, saltBase64: saltB64}); } }); });
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="profile-mini card">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--ig-grad2),var(--ig-grad4));display:flex;align-items:center;justify-content:center;color:white;font-weight:800" id="miniAvatar">G</div>
+        <div>
+          <div class="name" id="miniName">Convidado</div>
+          <div class="muted" id="miniHandle">@convidado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="suggestions card">
+      <h4 style="margin:0 0 8px 0">Sugestões</h4>
+      <div id="suggestList"></div>
+    </div>
+
+    <div class="suggestions card">
+      <h4 style="margin:0 0 8px 0">Trending</h4>
+      <div id="trendingList" class="muted">—</div>
+    </div>
+  </aside>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-bg" id="uploadModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3>Enviar Short (vídeo)</h3>
+    <div class="muted">Recomendado MP4 — duração até 60s (configurável).</div>
+    <input id="videoFile" type="file" accept="video/*" />
+    <input id="videoTitle" class="input" placeholder="Título do short" />
+    <textarea id="videoDesc" class="input" placeholder="Descrição (opcional)"></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeUpload()">Cancelar</button>
+      <button class="btn btn-primary" onclick="submitUpload()">Enviar</button>
+    </div>
+    <div id="uploadProgress" class="muted" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal-bg" id="loginModal">
+  <div class="modal">
+    <h3>Entrar / Registrar</h3>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <input id="authEmail" class="input" placeholder="email@exemplo.com" />
+      <input id="authPassword" class="input" placeholder="Senha" type="password" />
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeLogin()">Fechar</button>
+      <button class="btn btn-primary" onclick="handleRegister()">Registrar</button>
+      <button class="btn btn-primary" onclick="handleSignIn()">Entrar</button>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center"><button class="btn btn-ghost" onclick="signInWithGoogle()">Entrar com Google</button><div class="muted">OAuth via Firebase</div></div>
+    <div class="muted" style="margin-top:10px">Derivação de senha com scrypt aqui é demonstrativa; recomenda-se backend em produção.</div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal-bg" id="profileModal">
+  <div class="modal" style="max-width:720px">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div id="profileAvatar" style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#d6287b);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:28px">G</div>
+      <div>
+        <div style="font-weight:800" id="profileName">Convidado</div>
+        <div class="muted" id="profileHandle">@convidado</div>
+      </div>
+      <div style="margin-left:auto"><button class="btn btn-primary" onclick="editProfile()">Editar</button></div>
+    </div>
+    <div style="margin-top:12px" id="profileStats" class="muted">—</div>
+    <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.06)">
+    <div id="profileContent"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="btn btn-ghost" onclick="closeProfile()">Fechar</button></div>
+  </div>
+</div>
+
+<!-- bottom nav for mobile -->
+<div class="bottom-nav" id="mobileNav">
+  <button onclick="scrollTop()">🏠</button>
+  <button onclick="openUpload()">➕</button>
+  <button onclick="openProfile()">👤</button>
+</div>
+
+<!-- toast -->
+<div id="toast" style="position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:rgba(0,0,0,0.7);color:#fff;padding:8px 12px;border-radius:999px;display:none;z-index:3000"></div>
+
+<!-- ========================
+     CONFIG & LIBS
+     ======================== -->
+
+<script>
+/* === your security/hash config (as provided) === */
+const hash_config = {
+  algorithm: 'SCRYPT',
+  base64_signer_key: 'rvFvAj6xFNxBOTzmbjuk4FdDz5btzfPFIVNYdotfY7moes/lEFzF35stNcDwCxkuRy+mlem5rTfm5e+DgsGy7A==',
+  base64_salt_separator: 'Bw==',
+  rounds: 8,
+  mem_cost: 14
+};
+
+/* === Google client id provided by you === */
+const GOOGLE_CLIENT_ID = '873308453565-kccd4pmdru85pp0iiii9n807o72rnr64.apps.googleusercontent.com';
+
+/* === Firebase config (provided) ===
+   If you want to replace, change below object
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc",
+  authDomain: "fir-auth-3521c.firebaseapp.com",
+  databaseURL: "https://fir-auth-3521c-default-rtdb.firebaseio.com",
+  projectId: "fir-auth-3521c",
+  storageBucket: "fir-auth-3521c.firebasestorage.app",
+  messagingSenderId: "873308453565",
+  appId: "1:873308453565:web:4ff8d9863adb1eae1c95d4",
+  measurementId: "G-LWMZJ55W7N"
+};
+
+/* load scrypt + firebase compat libs dynamically to keep file single */
+(function loadLibs(){
+  const libs = [
+    "https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js",
+    "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js",
+    "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js",
+    "https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js",
+    "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"
+  ];
+  libs.forEach(src=>{
+    const s = document.createElement('script'); s.src = src; document.head.appendChild(s);
+  });
+})();
+</script>
+
+<!-- ========================
+     MAIN APP LOGIC (single-file)
+     ======================== -->
+<script>
+/* Utilities */
+const Util = (function(){
+  function toast(msg, ms=3000){ const el = document.getElementById('toast'); el.textContent = msg; el.style.display='block'; clearTimeout(el._t); el._t=setTimeout(()=>el.style.display='none', ms); }
+  function log(...a){ try{ console.log(...a); }catch(e){} }
+  function debounce(fn,ms=300){ let t; return function(...args){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,args),ms); } }
+  function uuid(){ return 'id-'+Math.random().toString(36).slice(2,10); }
+  return {toast,log,debounce,uuid};
+})();
+
+/* Wait for firebase libs to be ready, init */
+function waitForFirebase(cb, timeout=10000){
+  const start = Date.now();
+  (function check(){
+    if(window.firebase && firebase.initializeApp){
+      try{ firebase.initializeApp(firebaseConfig); window._auth = firebase.auth(); window._db = firebase.database(); window._storage = firebase.storage(); cb(null); return; }catch(e){ cb(e); return; }
     }
+    if(Date.now()-start > timeout){ cb(new Error('timeout')); return; }
+    setTimeout(check,150);
+  })();
+}
 
-    /*************** Inicializa Firebase após libs carregarem ***************/
-    function waitForFirebaseInit(cb, timeout=8000){
-      const start = Date.now();
-      (function check(){
-        if(window.firebase && firebase.initializeApp){
-          try{ firebase.initializeApp(firebaseConfig); cb(null); return; }catch(e){ cb(e); return; }
-        }
-        if(Date.now()-start > timeout){ cb(new Error('timeout')); return; }
-        setTimeout(check, 150);
-      })();
+/* Anti-bug handlers */
+window.addEventListener('error', e => { localStorage.setItem('__gbz_last_error', JSON.stringify({message:e.message,file:e.filename,line:e.lineno,stack:e.error?e.error.stack:null,ts:Date.now()})); });
+window.addEventListener('unhandledrejection', e => { console.error('UnhandledRejection', e); });
+
+/* App state */
+let STATE = { user:null, shorts:[], users:{}, follows:{} };
+
+/* DOM refs */
+const feedColumn = document.getElementById('feedColumn');
+const uploadModal = document.getElementById('uploadModal');
+const loginModal = document.getElementById('loginModal');
+const profileModal = document.getElementById('profileModal');
+const uploadBtn = document.getElementById('uploadBtn');
+const authBtn = document.getElementById('authBtn');
+const globalSearch = document.getElementById('globalSearch');
+
+/* actions bindings */
+uploadBtn.addEventListener('click', ()=> { if(!STATE.user) openLogin(); else openUpload(); });
+authBtn.addEventListener('click', ()=> { if(!STATE.user) openLogin(); else signOut(); });
+globalSearch.addEventListener('input', Util.debounce(e=>searchAll(e.target.value), 300));
+
+/* Scrypt derive helper (client-side) */
+async function derivePasswordKey(password, saltBase64=null){
+  if(!window.scrypt) throw new Error('scrypt-js not loaded');
+  const pw = new TextEncoder().encode(password);
+  let salt;
+  if(saltBase64){
+    const bin = atob(saltBase64); salt = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) salt[i]=bin.charCodeAt(i);
+  } else {
+    salt = crypto.getRandomValues(new Uint8Array(16));
+  }
+  const N = Math.pow(2, Math.max(1, hash_config.mem_cost || 14)); // mem_cost -> 14 => 16384
+  const r = 8; const p = Math.max(1, hash_config.rounds || 1); const dkLen = 64;
+  return await new Promise((resolve,reject)=> {
+    scrypt(pw, salt, N, r, p, dkLen, function(err, progress, key){
+      if(err) return reject(err);
+      if(key){
+        const b64 = btoa(String.fromCharCode.apply(null, Array.from(key)));
+        const saltB64 = btoa(String.fromCharCode.apply(null, Array.from(salt)));
+        resolve({derivedKeyBase64: b64, saltBase64: saltB64});
+      }
+    });
+  });
+}
+
+/* AUTH flows */
+async function handleRegister(){
+  try{
+    const email = (document.getElementById('authEmail').value||'').trim();
+    const password = (document.getElementById('authPassword').value||'');
+    if(!email||!password) return Util.toast('Preencha email e senha');
+    const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
+    await _auth.createUserWithEmailAndPassword(email, derivedKeyBase64);
+    const uid = _auth.currentUser.uid;
+    await _db.ref('users/'+uid).set({email, displayName: email.split('@')[0], createdAt:Date.now(), salt: saltBase64});
+    Util.toast('Conta criada');
+    closeLogin();
+  }catch(err){ Util.log('registerErr', err); Util.toast('Erro ao registrar: '+(err.message||err)); }
+}
+
+async function handleSignIn(){
+  try{
+    const email = (document.getElementById('authEmail').value||'').trim();
+    const password = (document.getElementById('authPassword').value||'');
+    if(!email||!password) return Util.toast('Preencha email e senha');
+    const snap = await _db.ref('users').orderByChild('email').equalTo(email).once('value');
+    let salt = null; snap.forEach(c=>{ const v=c.val(); if(v && v.salt) salt=v.salt; });
+    if(!salt) return Util.toast('Conta não encontrada');
+    const {derivedKeyBase64} = await derivePasswordKey(password, salt);
+    await _auth.signInWithEmailAndPassword(email, derivedKeyBase64);
+    Util.toast('Bem-vindo');
+    closeLogin();
+  }catch(err){ Util.log('signinErr', err); Util.toast('Erro ao logar: '+(err.message||err)); }
+}
+
+async function signInWithGoogle(){
+  try{
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await _auth.signInWithPopup(provider);
+    Util.toast('Logado com Google');
+    closeLogin();
+  }catch(err){ Util.log('googleErr', err); Util.toast('Erro Google: '+(err.message||err)); }
+}
+
+function signOut(){ if(!_auth) return; _auth.signOut().then(()=>{ Util.toast('Desconectado'); }).catch(e=>Util.log('signout', e)); }
+
+/* Auth state binding */
+function bindAuthState(){
+  _auth.onAuthStateChanged(async user=>{
+    STATE.user = user;
+    updateTopUI();
+    if(user){
+      // ensure DB user record exists
+      const uref = _db.ref('users/'+user.uid);
+      const s = await uref.once('value');
+      if(!s.exists()){
+        await uref.set({email:user.email||null, displayName:user.displayName||user.email.split('@')[0], createdAt:Date.now()});
+      }
+      loadProfileData(user.uid);
+    } else {
+      // guest
     }
+  });
+}
 
-    /*************** Fluxos de autenticação (funcionais) ***************/
-    async function handleRegister(){
-      try{
-        const authEl = window._gbz_auth; const db = window._gbz_db;
-        if(!authEl) return alert('Sistema ainda inicializando (Firebase). Aguarde alguns segundos e tente novamente.');
-        const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||'');
-        if(!email||!password) return alert('Preencha email e senha.');
-        const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
-        const userCred = await Util.retry(()=>authEl.createUserWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
-        const user = userCred.user;
-        await db.ref('users/'+Util.sanitizeKey(user.uid)).set({email, createdAt:Util.now(), salt: saltBase64, derivedKeyPreview: derivedKeyBase64.slice(0,24)+'...'});
-        Util.log('UserRegistered',{uid:user.uid,email});
-        alert('Conta criada com sucesso!');
-      }catch(err){ Util.log('registerErr', err); alert('Erro ao registrar: '+(err.message||err)); }
+/* UI updates */
+function updateTopUI(){
+  if(STATE.user){
+    authBtn.textContent = 'Sair';
+    document.getElementById('miniName').textContent = STATE.user.displayName || (STATE.user.email?STATE.user.email.split('@')[0]:'User');
+    document.getElementById('miniHandle').textContent = '@' + (STATE.user.displayName || (STATE.user.email?STATE.user.email.split('@')[0]:'user'));
+  } else {
+    authBtn.textContent = 'Entrar';
+    document.getElementById('miniName').textContent = 'Convidado';
+    document.getElementById('miniHandle').textContent = '@convidado';
+  }
+}
+
+/* Upload logic */
+function openUpload(){ uploadModal.style.display='flex'; }
+function closeUpload(){ uploadModal.style.display='none'; document.getElementById('videoFile').value=''; document.getElementById('videoTitle').value=''; document.getElementById('videoDesc').value=''; document.getElementById('uploadProgress').textContent=''; }
+function openLogin(){ loginModal.style.display='flex'; }
+function closeLogin(){ loginModal.style.display='none'; }
+function openProfile(){ profileModal.style.display='flex'; }
+function closeProfile(){ profileModal.style.display='none'; }
+
+async function submitUpload(){
+  try{
+    if(!STATE.user){ openLogin(); return; }
+    const fileInput = document.getElementById('videoFile');
+    const title = (document.getElementById('videoTitle').value||'').trim();
+    const desc = (document.getElementById('videoDesc').value||'').trim();
+    if(!fileInput.files.length) return Util.toast('Selecione um arquivo de vídeo');
+    if(!title) return Util.toast('Informe um título');
+    const file = fileInput.files[0];
+    const id = Util.uuid();
+    const path = `shorts/${STATE.user.uid}/${id}_${file.name}`;
+    const storageRef = _storage.ref().child(path);
+    const uploadTask = storageRef.put(file);
+
+    uploadTask.on('state_changed', snap=>{
+      const pct = Math.round((snap.bytesTransferred/snap.totalBytes)*100);
+      document.getElementById('uploadProgress').textContent = `Enviando: ${pct}%`;
+    }, err=>{
+      Util.log('uploadErr', err); Util.toast('Erro no upload: '+err.message);
+    }, async ()=>{
+      const url = await storageRef.getDownloadURL();
+      const meta = { id, title, desc, owner: STATE.user.uid, ownerName: STATE.user.displayName||STATE.user.email.split('@')[0], url, createdAt: Date.now(), likes:0, comments:0 };
+      await _db.ref('shorts/'+id).set(meta);
+      await _db.ref(`user_shorts/${STATE.user.uid}/${id}`).set(true);
+      Util.toast('Upload concluído');
+      closeUpload();
+      loadShorts();
+      loadProfileData(STATE.user.uid);
+    });
+  }catch(e){ Util.log('submitUploadErr', e); Util.toast('Erro ao enviar: ' + (e.message||e)); }
+}
+
+/* Load shorts into STATE and render feed */
+async function loadShorts(){
+  try{
+    const snap = await _db.ref('shorts').orderByChild('createdAt').limitToFirst(200).once('value');
+    const val = snap.val() || {};
+    const arr = Object.keys(val).map(k=>val[k]).sort((a,b)=>b.createdAt - a.createdAt);
+    STATE.shorts = arr;
+    renderFeed(arr);
+    // trending
+    const trending = arr.slice().sort((a,b)=> (b.likes||0)-(a.likes||0)).slice(0,6);
+    document.getElementById('trendingList').innerHTML = trending.map(t=>`<div style="margin-bottom:8px"><strong>${escapeHtml(t.title)}</strong><div class="muted">by ${escapeHtml(t.ownerName||'—')}</div></div>`).join('');
+  }catch(e){ Util.log('loadShorts', e); }
+}
+
+/* Render feed */
+function renderFeed(list){
+  feedColumn.innerHTML = '';
+  if(!list.length) feedColumn.innerHTML = `<div class="card center" style="padding:28px">Sem shorts — seja o primeiro a enviar!</div>`;
+  list.forEach(item=>{
+    const card = document.createElement('div'); card.className='card';
+    const short = document.createElement('div'); short.className='short';
+    // video element
+    const vid = document.createElement('video'); vid.src = item.url; vid.controls=false; vid.muted=true; vid.loop=true; vid.playsInline=true; vid.preload='metadata';
+    vid.addEventListener('click', ()=> { if(vid.paused) vid.play(); else vid.pause(); });
+    // meta area
+    const meta = document.createElement('div'); meta.className='short-meta';
+    meta.innerHTML = `<div class="avatar">${(item.ownerName||'U').charAt(0).toUpperCase()}</div>
+      <div class="meta-info">
+        <div class="user">${escapeHtml(item.ownerName||'—')} <span class="muted"> • ${timeAgo(item.createdAt)}</span></div>
+        <div class="desc">${escapeHtml(item.title)}</div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn like-btn" title="Curtir" onclick="toggleLike('${item.id}', this)">${item._liked? '❤️' : '🤍'}</button>
+        <div class="count" id="likecount-${item.id}">${item.likes||0}</div>
+        <button class="icon-btn" title="Comentários" onclick="openComments('${item.id}')">💬</button>
+        <button class="icon-btn" title="Ver perfil" onclick="openProfileById('${item.owner}')">👤</button>
+      </div>`;
+    // comments
+    const comments = document.createElement('div'); comments.className='comments hidden'; comments.id = 'comments-'+item.id;
+    comments.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Comentários</div><div id="commentsList-${item.id}"></div>
+      <div style="display:flex;gap:8px;margin-top:8px"><input placeholder="Escreva um comentário..." id="cinput-${item.id}" class="input" /><button class="btn btn-primary" onclick="postComment('${item.id}')">Enviar</button></div>`;
+    short.appendChild(vid); short.appendChild(meta); short.appendChild(comments);
+    card.appendChild(short); feedColumn.appendChild(card);
+    observeVideo(vid);
+  });
+}
+
+/* IntersectionObserver for autoplay/pause */
+function observeVideo(vid){
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ vid.play().catch(()=>{}); }
+      else vid.pause();
+    });
+  }, {threshold:0.6});
+  io.observe(vid);
+}
+
+/* Likes/comments/follow */
+async function toggleLike(shortId, el){
+  if(!STATE.user){ openLogin(); return; }
+  try{
+    const likeRef = _db.ref(`short_likes/${shortId}/${STATE.user.uid}`);
+    const snap = await likeRef.once('value');
+    if(snap.exists()){
+      await likeRef.remove();
+      await _db.ref(`shorts/${shortId}/likes`).transaction(l=> (l||0)-1 );
+      Util.toast('Like removido');
+    } else {
+      await likeRef.set(true);
+      await _db.ref(`shorts/${shortId}/likes`).transaction(l=> (l||0)+1 );
+      Util.toast('Você curtiu');
     }
+    loadShorts();
+  }catch(e){ Util.log('toggleLike', e); }
+}
 
-    async function handleSignIn(){
-      try{
-        const authEl = window._gbz_auth; const db = window._gbz_db;
-        if(!authEl) return alert('Sistema ainda inicializando (Firebase). Aguarde alguns segundos e tente novamente.');
-        const email = (document.getElementById('authEmail').value||'').trim(); const password = (document.getElementById('authPassword').value||'');
-        if(!email||!password) return alert('Preencha email e senha.');
-        const snap = await db.ref('users').orderByChild('email').equalTo(email).once('value');
-        let saltB64 = null; snap.forEach(child=>{ const v=child.val(); if(v && v.salt) saltB64 = v.salt; });
-        if(!saltB64) return alert('Conta não encontrada no DB. Registre antes.');
-        const {derivedKeyBase64} = await derivePasswordKey(password, saltB64);
-        await Util.retry(()=>authEl.signInWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
-        Util.log('UserSignedIn',{email});
-      }catch(err){ Util.log('signinErr', err); alert('Erro ao logar: '+(err.message||err)); }
+async function postComment(shortId){
+  if(!STATE.user){ openLogin(); return; }
+  const input = document.getElementById('cinput-'+shortId); const text = (input.value||'').trim();
+  if(!text) return;
+  const id = Util.uuid();
+  const payload = {id, author: STATE.user.uid, authorName:STATE.user.displayName||STATE.user.email.split('@')[0], text, ts:Date.now()};
+  await _db.ref(`short_comments/${shortId}/${id}`).set(payload);
+  await _db.ref(`shorts/${shortId}/comments`).transaction(c=> (c||0)+1 );
+  input.value='';
+  loadComments(shortId);
+}
+
+async function loadComments(shortId){
+  const listEl = document.getElementById('commentsList-'+shortId);
+  const snap = await _db.ref(`short_comments/${shortId}`).orderByChild('ts').once('value');
+  const val = snap.val() || {};
+  const arr = Object.keys(val).map(k=>val[k]).sort((a,b)=>a.ts-b.ts);
+  listEl.innerHTML = arr.map(c=>`<div class="comment"><div class="c-avatar"></div><div class="c-body"><div style="font-weight:700">${escapeHtml(c.authorName||'—')}</div><div class="muted">${escapeHtml(c.text)}</div></div></div>`).join('');
+}
+
+/* Profile and users */
+async function openProfileById(uid){
+  if(!uid) return Util.toast('Usuário inválido');
+  await loadProfileData(uid, true);
+}
+function openProfile(){ profileModal.style.display='flex'; }
+function closeProfile(){ profileModal.style.display='none'; }
+
+async function loadProfileData(uid, show=false){
+  try{
+    const snap = await _db.ref('users/'+uid).once('value');
+    const v = snap.val() || {};
+    document.getElementById('profileName').textContent = v.displayName || (v.email? v.email.split('@')[0] : 'Usuário');
+    document.getElementById('profileHandle').textContent = '@'+(v.displayName || (v.email? v.email.split('@')[0] : 'user'));
+    document.getElementById('profileAvatar').textContent = (v.displayName || (v.email? v.email.split('@')[0] : 'U')).charAt(0).toUpperCase();
+    const shortsSnap = await _db.ref(`user_shorts/${uid}`).once('value');
+    const shortsCount = shortsSnap.exists() ? Object.keys(shortsSnap.val()).length : 0;
+    const followersSnap = await _db.ref(`followers/${uid}`).once('value');
+    const followers = followersSnap.exists()? Object.keys(followersSnap.val()).length : 0;
+    document.getElementById('profileStats').textContent = `${shortsCount} shorts • ${followers} seguidores`;
+    const shortsList = [];
+    if(shortsSnap.exists()){
+      for(const id of Object.keys(shortsSnap.val())){
+        const s = (await _db.ref('shorts/'+id).once('value')).val();
+        if(s) shortsList.push(s);
+      }
     }
+    document.getElementById('profileContent').innerHTML = shortsList.length ? shortsList.map(s=>`<div style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.03);margin-bottom:8px"><strong>${escapeHtml(s.title)}</strong><div class="muted">Publicado: ${new Date(s.createdAt).toLocaleString()}</div></div>`).join('') : '<div class="muted">Nenhum short.</div>';
+    if(show) openProfile();
+  }catch(e){ Util.log('profileErr', e); }
+}
 
-    async function signInWithGoogle(){
-      try{
-        const authEl = window._gbz_auth;
-        if(!authEl) return alert('Sistema ainda inicializando (Firebase).');
-        const provider = new firebase.auth.GoogleAuthProvider();
-        await authEl.signInWithPopup(provider);
-        Util.log('GoogleSignIn');
-      }catch(err){ Util.log('googleErr', err); alert('Erro no login com Google: '+(err.message||err)); }
-    }
+/* Follow/unfollow (simple) */
+async function toggleFollow(targetUid){
+  if(!STATE.user){ openLogin(); return; }
+  const me = STATE.user.uid;
+  const path = `followers/${targetUid}/${me}`;
+  const snap = await _db.ref(path).once('value');
+  if(snap.exists()){ await _db.ref(path).remove(); Util.toast('Deixou de seguir'); } else { await _db.ref(path).set(true); Util.toast('Seguindo'); }
+}
 
-    function signOut(){ if(window._gbz_auth) window._gbz_auth.signOut().then(()=>{ Util.log('SignedOut'); alert('Desconectado'); }).catch(e=>{ Util.log('signOutErr', e); }); }
+/* Search logic: videos by title or users by name/email */
+async function searchAll(qRaw){
+  const q = (qRaw||'').trim().toLowerCase();
+  if(!q){ loadShorts(); return; }
+  // search shorts
+  const sSnap = await _db.ref('shorts').once('value'); const sVal = sSnap.val() || {};
+  const sArr = Object.keys(sVal).map(k=>sVal[k]).filter(s => (s.title||'').toLowerCase().includes(q) || (s.ownerName||'').toLowerCase().includes(q));
+  if(sArr.length){ renderFeed(sArr); return; }
+  // otherwise search users
+  const uSnap = await _db.ref('users').once('value'); const uVal = uSnap.val() || {};
+  const uArr = Object.keys(uVal).map(k=>({uid:k,...uVal[k]})).filter(u => (u.displayName||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q));
+  if(uArr.length){
+    feedColumn.innerHTML = `<div class="card" style="padding:18px"><h3>Resultados - usuários</h3>${uArr.map(u=>`<div style="display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;margin-top:8px"><div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#d6287b);display:flex;align-items:center;justify-content:center">${(u.displayName||u.email||'U').charAt(0).toUpperCase()}</div><div><div style="font-weight:700">${escapeHtml(u.displayName||u.email)}</div><div class="muted">@${(u.displayName||u.email).split('@')[0]}</div></div><div style="margin-left:auto"><button class="btn btn-primary" onclick="openProfileById('${u.uid}')">Ver perfil</button></div></div>`).join('')}</div>`;
+    return;
+  }
+  feedColumn.innerHTML = `<div class="card center" style="padding:28px">Nenhum resultado para "<strong>${escapeHtml(q)}</strong>"</div>`;
+}
 
-    function bindAuthState(){
-      if(!window._gbz_auth) return;
-      window._gbz_auth.onAuthStateChanged(user=>{
-        document.getElementById('accountShort').textContent = user ? (user.email || user.displayName || ('uid:'+user.uid.slice(0,8))) : '— desconectado —';
-        const profileEl = document.getElementById('profileEmail'); if(profileEl) profileEl.textContent = user ? (user.email || '—') : '—';
-        const welcomeName = document.getElementById('welcomeName'); if(welcomeName) welcomeName.textContent = user ? (user.displayName || user.email.split('@')[0]) : 'convidado';
-        if(user) loadUsersPreview();
-      });
-    }
+/* Comments open/close */
+async function openComments(shortId){
+  const el = document.getElementById('comments-'+shortId);
+  if(!el) return;
+  el.classList.toggle('hidden');
+  if(!el.classList.contains('hidden')) await loadComments(shortId);
+}
 
-    /*************** Scripts CRUD (funcional) ***************/
-    async function addScript(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const title = (document.getElementById('scriptTitle').value||'').trim(); const code = (document.getElementById('scriptCode').value||'').trim(); if(!title||!code) return alert('Preencha título e código.'); const id = Util.uuid(); const payload = {id, title, code, createdAt:Util.now()}; await Util.retry(()=>db.ref('scripts/'+Util.sanitizeKey(id)).set(payload), 3, 400); Util.log('ScriptAdded', payload); document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; loadScripts(); }catch(err){ Util.log('addScriptErr', err); alert('Erro ao adicionar script: '+(err.message||err)); } }
-    function clearScriptForm(){ document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; }
+/* Load comments */
+async function loadComments(shortId){
+  const listEl = document.getElementById('commentsList-'+shortId);
+  const snap = await _db.ref(`short_comments/${shortId}`).orderByChild('ts').once('value');
+  const val = snap.val() || {};
+  const arr = Object.keys(val).map(k=>val[k]).sort((a,b)=>a.ts-b.ts);
+  listEl.innerHTML = arr.map(c=>`<div class="comment"><div class="c-avatar"></div><div class="c-body"><div style="font-weight:700">${escapeHtml(c.authorName||'—')}</div><div class="muted">${escapeHtml(c.text)}</div></div></div>`).join('');
+}
 
-    async function loadScripts(){ try{ const db = window._gbz_db; if(!db) return; const snap = await db.ref('scripts').orderByChild('createdAt').limitToFirst(200).once('value'); const val = snap.val(); const list = document.getElementById('scriptList'); const catalog = document.getElementById('catalog'); if(!val){ if(list) list.innerHTML = '<div class="muted">Sem scripts</div>'; if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; } const rows = Object.keys(val).map(k=>val[k]).sort((a,b)=>b.createdAt-a.createdAt); if(list) list.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div><pre class="code">${escapeHtml(r.code)}</pre></div>`).join(''); if(catalog) catalog.innerHTML = rows.slice(0,8).map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.01)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); }catch(e){ Util.log('loadScriptsErr', e); } }
+/* Helpers */
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
+function timeAgo(ts){ if(!ts) return ''; const s = Math.floor((Date.now()-ts)/1000); if(s<60) return `${s}s`; if(s<3600) return `${Math.floor(s/60)}m`; if(s<86400) return `${Math.floor(s/3600)}h`; return `${Math.floor(s/86400)}d`; }
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
-    /*************** DB helpers ***************/
-    async function loadUsersPreview(){ try{ const db = window._gbz_db; if(!db) return; const snap = await db.ref('users').once('value'); const val = snap.val(); const el = document.getElementById('usersPreview'); if(!val){ if(el) el.innerHTML = '<div class="muted">Nenhum usuário salvo.</div>'; document.getElementById('statUsers').textContent = '0'; return; } const rows = Object.keys(val).map(k=>val[k]); if(el) el.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.email||'—')}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join(''); document.getElementById('statUsers').textContent = rows.length; }catch(e){ Util.log('loadUsersPreviewErr', e); } }
+/* Init: wait for firebase libs, then bind */
+waitForFirebase((err)=>{
+  if(err){
+    Util.log('firebase init failed', err);
+    Util.toast('Firebase não inicializado; backend desativado (algumas funções requerem Firebase).');
+    // UI will still render but DB functions will error if used.
+    return;
+  }
+  bindAuthState();
+  loadShorts();
+  loadSuggestions();
+  // live updates
+  _db.ref('shorts').on('value', ()=> loadShorts());
+});
 
-    async function writeTestValue(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const k = (document.getElementById('dbKey').value||'').trim(); const v = (document.getElementById('dbValue').value||'').trim(); if(!k) return alert('Informe chave'); await Util.retry(()=>db.ref('tests/'+Util.sanitizeKey(k)).set({value:v, createdAt:Util.now()}), 3, 400); Util.log('TestWrite',{k,v}); alert('Gravado com sucesso'); }catch(e){ Util.log('writeTestErr', e); alert('Erro ao gravar: ' + (e.message||e)); } }
-    async function readTestValue(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const k = (document.getElementById('dbKey').value||'').trim(); if(!k) return alert('Informe chave'); const snap = await db.ref('tests/'+Util.sanitizeKey(k)).once('value'); alert('Valor: ' + JSON.stringify(snap.val())); }catch(e){ Util.log('readTestErr', e); alert('Erro ao ler: ' + (e.message||e)); } }
+/* Suggestions loader */
+async function loadSuggestions(){
+  try{
+    const snap = await _db.ref('users').limitToFirst(8).once('value'); const val = snap.val()||{};
+    const arr = Object.keys(val).map(k=>({uid:k,...val[k]}));
+    const sl = document.getElementById('suggestList');
+    sl.innerHTML = arr.map(u=>`<div class="suggest-item"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#d6287b);display:flex;align-items:center;justify-content:center">${(u.displayName||u.email||'U').charAt(0).toUpperCase()}</div><div><div style="font-weight:700">${escapeHtml(u.displayName||u.email)}</div><div class="muted">@${(u.displayName||u.email||'user').split('@')[0]}</div></div></div><div><button class="btn btn-primary" onclick="openProfileById('${u.uid}')">Ver</button></div></div>`).join('');
+  }catch(e){ Util.log('suggestions err', e); }
+}
 
-    /*************** Diagnostics ***************/
-    async function runDiagnostics(){ const lines = []; try{ lines.push('Diagnostics — ' + new Date().toLocaleString()); lines.push('Navigator.onLine: ' + navigator.onLine); const db = window._gbz_db; if(db){ const connSnap = await db.ref('.info/connected').once('value'); lines.push('Firebase connected: ' + Boolean(connSnap.val())); try{ await Promise.race([db.ref('/').limitToFirst(1).once('value'), new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))]); lines.push('Root read: OK'); }catch(e){ lines.push('Root read: FAIL ('+e.message+')'); } } else { lines.push('Firebase not initialized yet'); } const logs = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); lines.push('Local logs: ' + logs.length); }catch(e){ lines.push('Diagnostics error: ' + (e.message||e)); } const el = document.getElementById('diagReport'); if(el) el.textContent = lines.join('\n'); Util.log('Diagnostics', lines); alert('Diagnóstico concluído — veja a aba Diagnósticos.'); }
+/* open login modal helpers exposed for inline handlers */
+window.handleRegister = handleRegister;
+window.handleSignIn = handleSignIn;
+window.signInWithGoogle = signInWithGoogle;
+window.openUpload = openUpload;
+window.closeUpload = closeUpload;
+window.openLogin = openLogin;
+window.closeLogin = closeLogin;
+window.openProfile = openProfile;
+window.closeProfile = closeProfile;
+window.submitUpload = submitUpload;
+window.openProfileById = openProfileById;
+window.postComment = postComment;
+window.scrollTop = scrollTop;
+window.toggleLike = toggleLike;
+window.openComments = openComments;
+window.openProfileById = openProfileById;
+window.toggleFollow = toggleFollow;
 
-    /*************** Bug reporter ***************/
-    async function submitBug(){ try{ const db = window._gbz_db; if(!db) return alert('Firebase não pronto.'); const title = (document.getElementById('bugTitle').value||'').trim(); const desc = (document.getElementById('bugDesc').value||'').trim(); if(!title||!desc) return alert('Preencha título e descrição'); const id = Util.uuid(); const payload = {id, title, desc, ts:Util.now(), user: (window._gbz_auth && _gbz_auth.currentUser)?_gbz_auth.currentUser.uid:null, email: (window._gbz_auth && _gbz_auth.currentUser)?_gbz_auth.currentUser.email:null}; await Util.retry(()=>db.ref('bug_reports/'+Util.sanitizeKey(id)).set(payload), 3, 600); Util.log('BugSubmitted', payload); alert('Bug enviado, obrigado!'); clearBugForm(); }catch(e){ Util.log('submitBugErr', e); alert('Erro ao enviar bug: ' + (e.message||e)); } }
-    function clearBugForm(){ document.getElementById('bugTitle').value=''; document.getElementById('bugDesc').value=''; }
+/* Expose simple signOut */
+window.signOut = signOut;
 
-    /*************** Logs utils ***************/
-    function clearLogs(){ localStorage.removeItem('__gbz_logs'); const el = document.getElementById('fullLog'); if(el) el.textContent=''; alert('Logs limpos'); }
-    function downloadLogs(){ const data = localStorage.getItem('__gbz_logs')||'[]'; const blob = new Blob([data],{type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'gbz_logs_'+Date.now()+'.json'; a.click(); URL.revokeObjectURL(url); }
-    function exportLogs(){ downloadLogs(); }
-    function clearLocalCache(){ localStorage.clear(); alert('Cache limpo'); }
+/* small convenience: open profile by id (used in search results) */
+async function openProfileById(uid){ await loadProfileData(uid, true); }
 
-    /*************** Search (live, debounced) ***************/
-    (function bindSearch(){
-      const el = document.getElementById('search');
-      if(!el) return;
-      el.addEventListener('input', Util.debounce(async function(){
-        const q = (this.value||'').trim().toLowerCase();
-        try{
-          const db = window._gbz_db; if(!db) return;
-          const snap = await db.ref('scripts').once('value'); const val = snap.val();
-          const catalog = document.getElementById('catalog');
-          if(!val){ if(catalog) catalog.innerHTML = '<div class="muted">Sem scripts</div>'; return; }
-          const rows = Object.keys(val).map(k=>val[k]);
-          const filtered = rows.filter(r=> (r.title||'').toLowerCase().includes(q) || (r.code||'').toLowerCase().includes(q));
-          if(catalog) catalog.innerHTML = filtered.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join('') || '<div class="muted">Nenhum resultado</div>';
-        }catch(e){ Util.log('searchErr', e); }
-      }, 300));
-    })();
+/* openUpload when top button clicked */
+document.getElementById('uploadBtn').addEventListener('click', ()=> { if(!STATE.user) openLogin(); else openUpload(); });
+document.getElementById('authBtn').addEventListener('click', ()=> { if(!STATE.user) openLogin(); else signOut(); });
 
-    /*************** Navigation ***************/
-    document.querySelectorAll('button.menu-btn').forEach(btn=>btn.addEventListener('click', (e)=>{ document.querySelectorAll('button.menu-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const v = btn.getAttribute('data-view'); showView(v); }));
-    function showView(id){ document.querySelectorAll('.view').forEach(v=>v.style.display='none'); const el = document.getElementById('view-'+id); if(el) el.style.display='block'; }
-    function navTo(view){ const btn = document.querySelector(`button.menu-btn[data-view="${view}"]`); if(btn) btn.click(); else showView(view); }
-    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m]; }); }
-
-    /*************** Init: wait Firebase then bind ***************/
-    waitForFirebaseInit(function(err){
-      if(err) { Util.log('firebaseInitErr', err); console.warn('Firebase init timeout or error:', err); }
-      try{
-        window._gbz_auth = firebase.auth();
-        window._gbz_db = firebase.database();
-        bindAuthState();
-        loadScripts();
-        loadUsersPreview();
-        Util.log('GbzSite ready');
-        setInterval(()=>{ loadScripts(); loadUsersPreview(); }, 60000);
-      }catch(e){ Util.log('postInitErr', e); }
-    }, 10000);
-
-    /*************** Global error handlers (Anti-bug) ***************/
-    window.addEventListener('error', function(ev){ const payload = {type:'error', message:ev.message, file:ev.filename, lineno:ev.lineno, col:ev.colno, stack: ev.error?ev.error.stack:null, ts:Util.now()}; localStorage.setItem('__gbz_last_error', JSON.stringify(payload)); Util.log('GlobalError', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Erro: ' + ev.message; });
-    window.addEventListener('unhandledrejection', function(ev){ const payload = {type:'unhandledrejection', reason:String(ev.reason), ts:Util.now()}; Util.log('UnhandledRejection', payload); const el = document.getElementById('diagReport'); if(el) el.textContent = 'Promise rejeitada: ' + String(ev.reason).slice(0,200); });
-  </script>
+</script>
 </body>
 </html>

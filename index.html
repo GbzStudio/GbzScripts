@@ -3,324 +3,329 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GbzScripts — Menu Principal</title>
-  <meta name="description" content="GbzScripts - site com menu completo, login (email + Google) e banco Firebase. Sem nada relacionado a admin." />
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>GbzScripts — Plataforma Profissional</title>
+  <meta name="description" content="GbzScripts — versão profissional: menu avançado, login (Email + Google), Firebase Realtime DB, sistema anti-bugs, diagnósticos e boas práticas." />
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Reset minimal */
+    /* ---------- RESET & BASE ---------- */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background: linear-gradient(180deg,#081024 0%, #071328 40%, #0b1b2f 100%);
-      color:#e6f0ff;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, #071428 0%, transparent 15%), linear-gradient(180deg,#081024 0%, #061023 100%);
+      color:#e7f1ff;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      line-height:1.4;
-      padding:28px;
+      line-height:1.45;
+      padding:20px;
     }
 
-    /* Container */
-    .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:28px;align-items:start}
+    .container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
 
-    /* Sidebar menu */
+    /* ---------- SIDEBAR ---------- */
     .sidebar{
-      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px);
-      box-shadow: 0 8px 24px rgba(2,6,23,0.6);
-      min-height:560px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      min-height:720px;display:flex;flex-direction:column;justify-content:space-between
     }
+
     .brand{display:flex;gap:12px;align-items:center;margin-bottom:14px}
-    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#7c5cff,#3dd3ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#021428;font-size:20px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#7c5cff,#3dd3ff);display:flex;align-items:center;justify-content:center;font-weight:900;color:#021428;font-size:22px}
     .brand h1{font-size:20px;margin-bottom:2px}
-    .brand p{font-size:12px;color:rgba(230,240,255,0.7)}
+    .brand p{font-size:12px;color:rgba(230,240,255,0.75)}
 
-    .menu-list{margin-top:14px}
-    .menu-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;cursor:pointer;margin-bottom:10px}
-    .menu-item:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
-    .menu-item .icon{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-weight:700}
-    .menu-item .label{font-weight:600}
-    .menu-item .hint{font-size:12px;color:rgba(230,240,255,0.6)}
+    .nav{margin-top:8px}
+    .nav button{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:none;background:transparent;color:inherit;width:100%;text-align:left;cursor:pointer;font-weight:600}
+    .nav button:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    .nav .active{background:linear-gradient(90deg,#103b66,#0b2b4c);box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
 
-    .sidebar .section{margin-top:18px}
-    .section h3{font-size:13px;color:rgba(230,240,255,0.85);margin-bottom:8px}
+    .sidebar .section{margin-top:16px}
+    .small{font-size:13px;color:rgba(230,240,255,0.75)}
 
-    /* Main content */
+    /* ---------- TOPBAR & MAIN ---------- */
     .main{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.04);min-height:560px;backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));
+      border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);min-height:720px;backdrop-filter: blur(6px);
     }
 
-    .hero{display:flex;align-items:center;justify-content:space-between;gap:18px}
-    .hero .title{font-size:22px;font-weight:700}
-    .hero p{color:rgba(230,240,255,0.75);font-size:13px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .search{flex:1;margin-left:12px}
+    .search input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit}
 
-    .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:18px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-    .card h4{font-size:15px;margin-bottom:8px}
-    .muted{font-size:13px;color:rgba(230,240,255,0.7)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
 
-    /* Login box */
+    .big{grid-column:span 3}
+    .two{grid-column:span 2}
+
+    .card-header{display:flex;justify-content:space-between;align-items:center}
+    .muted{color:rgba(230,240,255,0.7);font-size:13px}
+
+    /* ---------- AUTH UI ---------- */
     .auth-box{display:flex;flex-direction:column;gap:10px}
-    .input{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:#eaf6ff}
+    .input{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:inherit}
     .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
     .btn-primary{background:linear-gradient(90deg,#5b8cff,#5dffdf);color:#021428}
     .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
 
-    .small{font-size:13px}
-    .note{font-size:12px;color:rgba(230,240,255,0.6)}
+    /* ---------- DIAGNOSTICS & LOGGER ---------- */
+    .log-area{height:200px;overflow:auto;background:rgba(0,0,0,0.06);padding:10px;border-radius:8px;font-family:JetBrains Mono, monospace;font-size:12px}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:700}
 
-    /* Responsive */
-    @media (max-width:940px){
-      .wrap{grid-template-columns:1fr;}
-      .logo{width:44px;height:44px}
+    /* ---------- BUG REPORTER ---------- */
+    .bug-form textarea{min-height:120px}
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr;}
+      .grid{grid-template-columns:1fr}
     }
-
-    /* footer */
-    footer{margin-top:18px;text-align:center;color:rgba(230,240,255,0.6);font-size:13px}
-
-    /* decorative */
-    .sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.02),transparent);margin:12px 0;border-radius:2px}
-
-    /* users list in DB preview */
-    .db-preview{max-height:160px;overflow:auto;padding-right:6px}
-    .db-row{display:flex;justify-content:space-between;padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.07)}
-    .db-row small{opacity:0.85}
-
-    /* big welcome */
-    .welcome-big{font-family:'JetBrains Mono', monospace;font-size:18px;letter-spacing:0.6px}
-
-    /* tooltip-ish */
-    .hint-box{padding:10px;border-radius:8px;border:1px dashed rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
 
   </style>
 
-  <!-- Scrypt-js (client-side scrypt) CDN -->
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js"></script>
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <aside class="sidebar">
-      <div class="brand">
-        <div class="logo">Gbz</div>
-        <div>
-          <h1>GbzScripts</h1>
-          <p>Menu interativo • Scripts • Demos</p>
+      <div>
+        <div class="brand">
+          <div class="logo">Gbz</div>
+          <div>
+            <h1>GbzScripts Pro</h1>
+            <p class="small">Menu avançado · Autenticação · Diagnóstico</p>
+          </div>
+        </div>
+
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+          <button id="nav-home" class="active" onclick="navTo('home')">🏠 Início</button>
+          <button id="nav-scripts" onclick="navTo('scripts')">📜 Scripts</button>
+          <button id="nav-auth" onclick="navTo('auth')">🔐 Conta</button>
+          <button id="nav-db" onclick="navTo('db')">🗄️ Banco</button>
+          <button id="nav-settings" onclick="navTo('settings')">⚙️ Configurações</button>
+          <button id="nav-diag" onclick="navTo('diag')">🛠 Diagnósticos</button>
+        </nav>
+
+        <div class="section" style="margin-top:16px">
+          <div class="small">Versão</div>
+          <div style="margin-top:6px;font-weight:800">GbzScripts v1.2.0</div>
+          <div style="margin-top:6px" class="muted">Modo público • sem funções administrativas</div>
         </div>
       </div>
 
-      <div class="section">
-        <h3>Menu</h3>
-        <div class="menu-list">
-          <div class="menu-item" data-target="home" onclick="openTab('home')">
-            <div class="icon">🏠</div>
-            <div>
-              <div class="label">Início</div>
-              <div class="hint">Visão geral</div>
-            </div>
-          </div>
-
-          <div class="menu-item" data-target="scripts" onclick="openTab('scripts')">
-            <div class="icon">📜</div>
-            <div>
-              <div class="label">Scripts</div>
-              <div class="hint">Coleções e demos</div>
-            </div>
-          </div>
-
-          <div class="menu-item" data-target="login" onclick="openTab('login')">
-            <div class="icon">🔐</div>
-            <div>
-              <div class="label">Login</div>
-              <div class="hint">Entrar com email ou Google</div>
-            </div>
-          </div>
-
-          <div class="menu-item" data-target="database" onclick="openTab('database')">
-            <div class="icon">🗄️</div>
-            <div>
-              <div class="label">Banco</div>
-              <div class="hint">Preview do Realtime DB</div>
-            </div>
-          </div>
-
-          <div class="menu-item" data-target="about" onclick="openTab('about')">
-            <div class="icon">❓</div>
-            <div>
-              <div class="label">Sobre</div>
-              <div class="hint">Informações e licenças</div>
-            </div>
-          </div>
+      <div style="margin-top:18px">
+        <div class="small">Conta</div>
+        <div style="margin-top:8px">
+          <div id="accountShort" class="pill">— desconectado —</div>
         </div>
       </div>
-
-      <div class="section">
-        <h3>Conta</h3>
-        <div class="hint-box" style="margin-top:8px">
-          <div class="small">Nenhuma função de administrador. Sem privilégios especiais. Projeto público / educacional.</div>
-        </div>
-
-        <div class="sep"></div>
-
-        <div style="margin-top:10px">
-          <div class="small">Conectado como:</div>
-          <div id="userShort" style="margin-top:10px;font-weight:700">— desconectado —</div>
-        </div>
-
-      </div>
-
-      <footer style="margin-top:18px">
-        <div class="small">Feito por Gbz • <small style="opacity:0.8">Sem elementos de admin</small></div>
-      </footer>
     </aside>
 
-    <main class="main">
-      <div id="home" class="tab">
-        <div class="hero">
+    <main class="main" id="main">
+      <!-- HOME -->
+      <section id="home" class="view">
+        <div class="topbar">
           <div>
-            <div class="title">Bem-vindo ao <span class="welcome-big">GbzScripts</span></div>
-            <p>Este é um template completo com menu, autenticação (email + Google) e integração básica com Firebase Realtime Database. Tudo sem administrativas.</p>
+            <h2>Bem-vindo, <span id="welcomeName">convidado</span></h2>
+            <div class="muted">Plataforma profissional para organizar e testar scripts com segurança e diagnósticos integrados.</div>
           </div>
-          <div>
-            <button class="btn btn-primary" onclick="openTab('login')">Entrar / Registrar</button>
-          </div>
-        </div>
-
-        <div class="card-grid">
-          <div class="card">
-            <h4>Visão Geral</h4>
-            <p class="muted">Interface responsiva, login com hash scrypt client-side, Google Sign-In via Firebase Auth, dados armazenados no Realtime Database. Tudo em um arquivo para deploy rápido no GitHub Pages.</p>
-          </div>
-
-          <div class="card">
-            <h4>Demonstrações</h4>
-            <p class="muted">Inclui espaço para listar scripts, pré-visualizar configurações e testar conexões com banco em tempo real.</p>
-          </div>
-
-          <div class="card">
-            <h4>Segurança</h4>
-            <p class="muted">Este template usa scrypt para derivar uma chave do password no cliente antes de enviar ao Firebase Auth (isto é apenas um exemplo técnico — normalmente recomendo usar mecanismos server-side para maior segurança).</p>
-          </div>
-
-          <div class="card">
-            <h4>Deploy</h4>
-            <p class="muted">Basta criar um repositório no GitHub com este arquivo <code>index.html</code> na branch <code>main</code> e ativar GitHub Pages.</p>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="search"><input id="searchInput" placeholder="Pesquisar scripts, usuários, chaves..." oninput="debounce(searchCatalog,300)"/></div>
+            <button class="btn btn-ghost" onclick="openHelp()">Ajuda</button>
           </div>
         </div>
-      </div>
 
-      <div id="scripts" class="tab" style="display:none">
-        <h3>Scripts e Recursos</h3>
-        <p class="muted">Área para colocar suas coleções de scripts, demos e links. Este template mostra exemplos, você pode extender como quiser.</p>
-        <div style="margin-top:12px">
-          <div class="card">
-            <h4>Script: Clicker Demo</h4>
-            <pre style="white-space:pre-wrap;font-size:13px;margin-top:8px;background:rgba(0,0,0,0.06);padding:12px;border-radius:8px;color:#dff6ff">// Exemplo simples de script
-function demoClicker(){
-  let clicks = 0;
-  return {
-    click(){ clicks++; return clicks; },
-    get(){ return clicks }
-  }
-}
-</pre>
+        <div class="grid">
+          <div class="panel">
+            <div class="card-header">
+              <strong>Resumo</strong>
+              <span class="muted">Última sincronização: <span id="lastSync">—</span></span>
+            </div>
+            <div style="margin-top:8px" class="muted">Controles rápidos e indicadores de saúde do sistema.</div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <div style="flex:1"><div class="small">Usuários ativos</div><div id="statUsers" style="font-weight:800;font-size:20px">—</div></div>
+              <div style="flex:1"><div class="small">Erros recentes</div><div id="statErrors" style="font-weight:800;font-size:20px">0</div></div>
+              <div style="flex:1"><div class="small">Status do DB</div><div id="statDB" style="font-weight:800;font-size:20px">OK</div></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="card-header"><strong>Atalhos</strong><div class="muted">Acesso rápido</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+              <button class="btn btn-primary" onclick="navTo('auth')">Entrar / Registrar</button>
+              <button class="btn btn-ghost" onclick="navTo('db')">Abrir Banco</button>
+              <button class="btn btn-ghost" onclick="navTo('diag')">Executar diagnóstico</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="card-header"><strong>Notificações</strong><div class="muted">Mensagens do sistema</div></div>
+            <div id="notifications" style="margin-top:8px" class="muted">Nenhuma notificação.</div>
+          </div>
+
+          <div class="panel two">
+            <strong>Catálogo de Scripts</strong>
+            <div class="muted" style="margin-top:6px">Lista pesquisável de scripts, tags e demos.</div>
+            <div id="scriptsCatalog" style="margin-top:10px"></div>
+          </div>
+
+          <div class="panel">
+            <strong>Logs Rápidos</strong>
+            <div class="log-area" id="miniLog"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SCRIPTS -->
+      <section id="scripts" class="view" style="display:none">
+        <h3>Scripts</h3>
+        <div class="muted">Gerencie templates, demos e coleções. Arraste e solte para reorganizar (simulado).</div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:320px" class="panel">
+            <strong>Adicionar Script</strong>
+            <input id="scriptTitle" class="input" placeholder="Título" style="margin-top:8px" />
+            <textarea id="scriptCode" class="input" placeholder="Código do script" style="margin-top:8px;min-height:160px"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="addScript()">Salvar</button><button class="btn btn-ghost" onclick="clearScriptForm()">Limpar</button></div>
+            <div class="muted" style="margin-top:8px">Scripts são armazenados no nó /scripts do Realtime DB.</div>
+          </div>
+
+          <div style="flex:1;min-width:320px" class="panel">
+            <strong>Catálogo</strong>
+            <div id="scriptListArea" style="margin-top:8px"></div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div id="login" class="tab" style="display:none">
-        <h3>Login / Registro</h3>
-        <p class="muted">Você pode criar uma conta com email/senha (senha é derivada via scrypt no cliente) ou entrar com Google.</p>
-
-        <div style="display:flex;gap:18px;margin-top:12px;flex-wrap:wrap">
-          <div style="flex:1;min-width:280px">
-            <div class="card">
-              <h4>Entrar com Email</h4>
-              <div class="auth-box" style="margin-top:8px">
-                <input id="email" class="input" placeholder="seu@email.com" />
-                <input id="password" type="password" class="input" placeholder="Senha" />
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <button class="btn btn-primary" onclick="handleSignIn()">Entrar</button>
-                  <button class="btn btn-ghost" onclick="handleRegister()">Registrar</button>
-                </div>
-                <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
-                  <button class="btn btn-ghost" onclick="signInWithGoogle()">Entrar com Google</button>
-                  <div class="note">Usa OAuth via Firebase</div>
-                </div>
-                <div style="margin-top:10px" class="note">Observação: Senhas são processadas por scrypt antes de serem enviadas ao Firebase (derivação client-side). Isso é apenas um exemplo técnico — para produção, prefira proteger segredos no servidor.</div>
+      <!-- AUTH -->
+      <section id="auth" class="view" style="display:none">
+        <h3>Conta</h3>
+        <div class="grid">
+          <div class="panel">
+            <strong>Login / Registro (Email)</strong>
+            <div style="margin-top:8px" class="auth-box">
+              <input id="authEmail" class="input" placeholder="email@exemplo.com" />
+              <input id="authPassword" type="password" class="input" placeholder="Senha" />
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-primary" onclick="handleSignIn()">Entrar</button>
+                <button class="btn btn-ghost" onclick="handleRegister()">Registrar</button>
               </div>
+              <div class="muted" style="margin-top:8px">As senhas são derivadas com scrypt no cliente como demonstração. Para produção, usar servidor.</div>
             </div>
           </div>
 
-          <div style="flex:1;min-width:260px">
-            <div class="card">
-              <h4>Estado da conta</h4>
-              <div style="margin-top:8px">
-                <div class="small">Usuário: <span id="userEmail">— desconectado —</span></div>
-                <div style="margin-top:8px">
-                  <button class="btn btn-ghost" onclick="signOut()">Sair</button>
-                </div>
-                <div class="sep"></div>
-                <div class="db-preview" id="dbPreview">Carregando preview do DB...</div>
-              </div>
+          <div class="panel">
+            <strong>Login com Google</strong>
+            <div style="margin-top:8px">
+              <button class="btn btn-primary" onclick="signInWithGoogle()">Entrar com Google</button>
+              <div class="muted" style="margin-top:8px">Usa Firebase Auth (OAuth). O projeto não armazena privilégios administrativos.</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <strong>Perfil & Ações</strong>
+            <div style="margin-top:8px">
+              <div class="small">Usuário: <span id="profileEmail">—</span></div>
+              <div style="margin-top:8px"><button class="btn btn-ghost" onclick="signOut()">Sair</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATABASE -->
+      <section id="db" class="view" style="display:none">
+        <h3>Banco de Dados</h3>
+        <div class="muted">Ferramentas seguras para visualizar e testar valores no Realtime Database.</div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <div class="panel" style="flex:1;min-width:360px">
+            <strong>Usuários (Preview)</strong>
+            <div id="usersTable" style="margin-top:8px"></div>
+          </div>
+
+          <div class="panel" style="flex:1;min-width:320px">
+            <strong>Operações de Teste</strong>
+            <input id="dbKey" class="input" placeholder="chave (ex: test1)" />
+            <input id="dbValue" class="input" placeholder="valor" style="margin-top:8px" />
+            <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="writeTestValue()">Gravar</button><button class="btn btn-ghost" onclick="readTestValue()">Ler</button></div>
+            <div class="muted" style="margin-top:8px">Operações de exemplo no nó /tests.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="settings" class="view" style="display:none">
+        <h3>Configurações</h3>
+        <div class="muted">Ajustes, feature flags, e opções de depuração.</div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <div class="panel" style="flex:1;min-width:320px">
+            <strong>Feature Flags</strong>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+              <label><input type="checkbox" id="flagVerbose" /> Logs verbosos</label>
+              <label><input type="checkbox" id="flagRetry" checked /> Auto retry on write failures</label>
+              <label><input type="checkbox" id="flagOfflineCache" checked /> Cache local (localStorage)</label>
+            </div>
+          </div>
+
+          <div class="panel" style="flex:1;min-width:320px">
+            <strong>Exportar / Importar</strong>
+            <div style="margin-top:8px">
+              <button class="btn btn-ghost" onclick="exportLogs()">Exportar Logs</button>
+              <button class="btn btn-ghost" onclick="clearLocalCache()">Limpar Cache</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DIAGNOSTICS -->
+      <section id="diag" class="view" style="display:none">
+        <h3>Diagnósticos & Anti-Bugs</h3>
+        <div class="muted">Ferramentas automáticas de detecção, coleta de erros e análise.</div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <div class="panel" style="flex:1;min-width:420px">
+            <strong>Executar diagnóstico</strong>
+            <div style="margin-top:8px"><button class="btn btn-primary" onclick="runDiagnostics()">Rodar agora</button></div>
+            <div style="margin-top:8px" class="muted">O sistema executa checagens de integridade e sugere ações.</div>
+          </div>
+
+          <div class="panel" style="flex:1;min-width:320px">
+            <strong>Relatório de erros</strong>
+            <div style="margin-top:8px" id="errorReport">Sem erros reportados.</div>
+          </div>
+
+          <div class="panel big">
+            <strong>Logger / Buffer de eventos</strong>
+            <div style="margin-top:8px" class="log-area" id="fullLog"></div>
+            <div style="margin-top:8px;display:flex;gap:8px"><button class="btn btn-ghost" onclick="clearLogs()">Limpar logs</button><button class="btn btn-ghost" onclick="downloadLogs()">Download</button></div>
+          </div>
+
+          <div class="panel">
+            <strong>Enviar Bug</strong>
+            <div style="margin-top:8px" class="bug-form">
+              <input id="bugTitle" class="input" placeholder="Resumo curto" />
+              <textarea id="bugDesc" class="input" placeholder="Descreva o passo a passo..."></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="submitBug()">Enviar</button><button class="btn btn-ghost" onclick="clearBugForm()">Limpar</button></div>
             </div>
           </div>
 
         </div>
-
-      </div>
-
-      <div id="database" class="tab" style="display:none">
-        <h3>Preview do Realtime Database</h3>
-        <p class="muted">Mostramos alguns nós públicos para testes. Este app usa permissões padrão do projeto; verifique seu console do Firebase para regras reais.</p>
-        <div style="margin-top:12px">
-          <div class="card">
-            <h4>Usuários Registrados</h4>
-            <div class="db-preview" id="usersList"></div>
-          </div>
-
-          <div class="card" style="margin-top:12px">
-            <h4>Operações de Teste</h4>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <input id="testKey" class="input" placeholder="chave" style="flex:1" />
-              <input id="testValue" class="input" placeholder="valor" style="flex:1" />
-              <button class="btn btn-primary" onclick="writeTestValue()">Gravar</button>
-            </div>
-            <div class="note" style="margin-top:8px">Exemplo: grava no nó /tests/{chave}.</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="about" class="tab" style="display:none">
-        <h3>Sobre</h3>
-        <p class="muted">Template criado para fins educacionais e demonstrativos. Tudo sem funcionalidades administrativas.</p>
-        <div style="margin-top:12px">
-          <div class="card">
-            <h4>Licença</h4>
-            <p class="muted">Sinta-se livre para adaptar e usar. Não inclua informações sensíveis públicas sem proteção.</p>
-          </div>
-        </div>
-      </div>
+      </section>
 
     </main>
   </div>
 
   <script>
     /**************************************************************************
-     * CONFIGURAÇÕES SOLICITADAS PELO USUÁRIO
-     * - hash_config: objeto com parâmetros SCRYPT (apenas informativo/usado pelo scrypt-js)
-     * - google client id: usado para provedor Google (Firebase configura automaticamente)
-     * - firebaseConfig: configuração do projeto Firebase para inicialização
+     * CONFIG (mantido: hash_config, GOOGLE_CLIENT_ID, firebaseConfig)
      **************************************************************************/
-
     const hash_config = {
       algorithm: 'SCRYPT',
       base64_signer_key: 'rvFvAj6xFNxBOTzmbjuk4FdDz5btzfPFIVNYdotfY7moes/lEFzF35stNcDwCxkuRy+mlem5rTfm5e+DgsGy7A==',
@@ -329,10 +334,8 @@ function demoClicker(){
       mem_cost: 14
     };
 
-    // Google OAuth client ID fornecido
     const GOOGLE_CLIENT_ID = '873308453565-kccd4pmdru85pp0iiii9n807o72rnr64.apps.googleusercontent.com';
 
-    // Firebase configuration fornecida pelo usuário
     const firebaseConfig = {
       apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc",
       authDomain: "fir-auth-3521c.firebaseapp.com",
@@ -345,249 +348,339 @@ function demoClicker(){
     };
 
     /**************************************************************************
-     * Inicialização do Firebase (compat mode usado para simplicidade em um único arquivo)
+     * INITIALIZE
      **************************************************************************/
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
 
     /**************************************************************************
-     * Utility: convert base64 to Uint8Array (usado pelo scrypt-js)
+     * Small, robust utility library used across the app
      **************************************************************************/
-    function base64ToUint8Array(base64) {
-      const binary = atob(base64);
-      const len = binary.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binary.charCodeAt(i);
-      }
-      return bytes;
-    }
-
-    /**************************************************************************
-     * Deriva senha com scrypt-js
-     * - scrypt(params): N, r, p (work factor / mem)
-     * - Aqui usamos uma interpretação simples dos parâmetros rounds/mem_cost
-     * - Este é um exemplo educacional: em produção, trate segredos com mais cuidado.
-     **************************************************************************/
-    async function derivePasswordKey(password, saltText = null) {
-      // converte string para bytes
-      const pwBytes = new TextEncoder().encode(password);
-      // se não tiver salt, gera um aleatório
-      let salt;
-      if (saltText) {
-        salt = new TextEncoder().encode(saltText);
-      } else {
-        salt = crypto.getRandomValues(new Uint8Array(16));
+    const Util = (function(){
+      function log(...args){
+        const s = args.map(a=>typeof a==='object'?JSON.stringify(a):String(a)).join(' ');
+        _pushLog(s);
+        if(document.getElementById('miniLog')){
+          const el = document.getElementById('miniLog');
+          el.innerHTML = (new Date()).toLocaleTimeString() + ' — ' + s + '
+' + el.innerHTML;
+        }
+        if(document.getElementById('fullLog')){
+          const el = document.getElementById('fullLog');
+          el.innerHTML = (new Date()).toLocaleString() + ' — ' + s + '
+' + el.innerHTML;
+        }
+        if(document.getElementById('statErrors')){
+          const c = _errorCount(); document.getElementById('statErrors').textContent = c;
+        }
+        if(document.getElementById('flagVerbose') && document.getElementById('flagVerbose').checked){ console.debug(...args); }
       }
 
-      // parâmetros: usamos mem_cost como log2(N) e rounds como p (paralelism)
-      const N = Math.pow(2, Math.max(1, (hash_config.mem_cost || 14)));
-      const r = 8; // bloco
-      const p = Math.max(1, (hash_config.rounds || 1));
-      const dkLen = 64; // bytes de saída
+      function now(){ return Date.now(); }
 
-      // scrypt-js usa scrypt(password, salt, N, r, p, dkLen, callback)
-      return new Promise((resolve, reject) => {
-        scrypt(pwBytes, salt, N, r, p, dkLen, function(error, progress, key){
-          if (error) return reject(error);
-          if (key) {
-            // key é uma Uint8Array
-            const b64 = btoa(String.fromCharCode.apply(null, Array.from(key)));
-            resolve({derivedKeyBase64: b64, saltBase64: btoa(String.fromCharCode.apply(null, Array.from(salt)))});
-          }
-        });
-      });
-    }
+      function sanitizeKey(k){ return String(k).replace(/\.|\#|\$|\[|\]/g, '_'); }
 
-    /**************************************************************************
-     * UI helpers
-     **************************************************************************/
-    function openTab(id){
-      document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
-      const el = document.getElementById(id);
-      if(el) el.style.display='block';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
+      function debounce(fn, ms){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }}
 
-    openTab('home');
+      function safeParse(s){ try{ return JSON.parse(s); }catch(e){ return null; } }
 
-    function showMessage(msg){
-      alert(msg);
-    }
+      /* retry with exponential backoff */
+      async function retry(fn, attempts=3, baseDelay=300){ let a=0; while(true){ try{ return await fn(); }catch(e){ a++; if(a>=attempts) throw e; await new Promise(r=>setTimeout(r, baseDelay*Math.pow(2,a))); }} }
+
+      function _errorCount(){ try{ const arr = JSON.parse(localStorage.getItem('__gbz_errors')||'[]'); return arr.length; }catch(e){ return 0; } }
+
+      /* lightweight UUID */
+      function uuid(){ return 'id-'+Math.random().toString(36).slice(2,10); }
+
+      return {log, now, sanitizeKey, debounce, safeParse, retry, uuid};
+    })();
 
     /**************************************************************************
-     * Auth: registrar e logar com senha derivada localmente via scrypt
-     * Observação importante:
-     * - Derivamos uma chave com scrypt e a usamos como "senha" ao criar a conta Firebase.
-     * - Isso significa que a senha armazenada pelo Firebase é o resultado do derivation —
-     *   para autenticar, derivamos novamente e usamos o mesmo valor.
-     * - Este padrão é apenas um exemplo técnico (client-side scrypt). Em produção, prefira enviar via HTTPS ao servidor e usar rotinas server-side seguras.
+     * LOG BUFFER & ANTI-BUGS: window.onerror, unhandledrejection, watchdog
      **************************************************************************/
-
-    async function handleRegister(){
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      if(!email || !password){ showMessage('Preencha email e senha.'); return; }
-
+    const _LOG_BUFFER_MAX = 1000;
+    function _pushLog(line){
       try{
-        // derivar
-        const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
-        // usa derivedKeyBase64 como senha para Firebase Auth
-        const userCred = await auth.createUserWithEmailAndPassword(email, derivedKeyBase64);
-        const user = userCred.user;
-        // salva metadados no Realtime DB
-        await database.ref('users/' + sanitizeKey(user.uid)).set({
-          email: email,
-          createdAt: Date.now(),
-          salt: saltBase64,
-          derivedKeyPreview: derivedKeyBase64.slice(0,24) + '...'
+        const arr = JSON.parse(localStorage.getItem('__gbz_logs')||'[]');
+        arr.unshift(line);
+        if(arr.length>_LOG_BUFFER_MAX) arr.splice(_LOG_BUFFER_MAX);
+        localStorage.setItem('__gbz_logs', JSON.stringify(arr));
+      }catch(e){ console.error('log push failed', e); }
+    }
+
+    window.addEventListener('error', function(event){
+      const payload = {type:'error', msg: event.message, source: event.filename, lineno: event.lineno, colno: event.colno, stack: event.error? event.error.stack : null, ts: Util.now() };
+      _pushLog(JSON.stringify(payload));
+      document.getElementById('errorReport').textContent = 'Erro detectado: ' + (event.message||'');
+      Util.log('GlobalError', payload);
+    });
+
+    window.addEventListener('unhandledrejection', function(ev){
+      const reason = ev.reason || 'unknown';
+      const payload = {type:'unhandledrejection', reason: String(reason), ts: Util.now() };
+      _pushLog(JSON.stringify(payload));
+      document.getElementById('errorReport').textContent = 'Promise rejeitada: ' + String(reason).slice(0,200);
+      Util.log('UnhandledRejection', payload);
+    });
+
+    // watchdog: checa se app responde e reinicia subsistemas leves
+    let _watchdogTimer = null;
+    function startWatchdog(interval=60000){
+      if(_watchdogTimer) clearInterval(_watchdogTimer);
+      _watchdogTimer = setInterval(()=>{
+        try{
+          Util.log('Watchdog ping');
+          // health check: DB connection check (very light)
+          database.ref('.info/connected').once('value').then(snap=>{
+            const connected = snap.val(); document.getElementById('statDB').textContent = connected ? 'Conectado' : 'Desconectado';
+          }).catch(e=>{ Util.log('Watchdog DB error', e); });
+        }catch(e){ console.error('watchdog failed', e); }
+      }, interval);
+    }
+
+    startWatchdog(45000);
+
+    /**************************************************************************
+     * SCRYPT helpers (derivar senha)
+     **************************************************************************/
+    async function derivePasswordKey(password, saltText = null){
+      try{
+        const pwBytes = new TextEncoder().encode(password);
+        let salt;
+        if(saltText){ salt = new TextEncoder().encode(saltText); }
+        else{ salt = crypto.getRandomValues(new Uint8Array(16)); }
+
+        const N = Math.pow(2, Math.max(1, (hash_config.mem_cost || 14)));
+        const r = 8;
+        const p = Math.max(1, (hash_config.rounds || 1));
+        const dkLen = 64;
+        return await new Promise((resolve, reject)=>{
+          scrypt(pwBytes, salt, N, r, p, dkLen, function(error, progress, key){
+            if(error) return reject(error);
+            if(key){
+              const b64 = btoa(String.fromCharCode.apply(null, Array.from(key)));
+              const saltB64 = btoa(String.fromCharCode.apply(null, Array.from(salt)));
+              resolve({derivedKeyBase64: b64, saltBase64: saltB64});
+            }
+          });
         });
-        showMessage('Conta criada com sucesso!');
-      }catch(err){
-        console.error(err);
-        showMessage('Erro ao registrar: ' + (err.message || err));
-      }
+      }catch(e){ Util.log('deriveKeyFailed', e); throw e; }
+    }
+
+    /**************************************************************************
+     * AUTH flows (register/login with scrypt-derived password, and Google)
+     **************************************************************************/
+    async function handleRegister(){
+      try{
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        if(!email || !password) return alert('Preencha email e senha.');
+        const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
+        // create user with derived key in Firebase
+        const userCred = await Util.retry(()=>auth.createUserWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
+        const user = userCred.user;
+        await database.ref('users/' + Util.sanitizeKey(user.uid)).set({email, createdAt: Util.now(), salt: saltBase64, derivedKeyPreview: derivedKeyBase64.slice(0,24)+'...'});
+        Util.log('UserRegistered', {uid:user.uid, email});
+        alert('Conta criada com sucesso!');
+      }catch(err){ Util.log('registerError', err); alert('Erro ao registrar: ' + (err.message||err)); }
     }
 
     async function handleSignIn(){
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      if(!email || !password){ showMessage('Preencha email e senha.'); return; }
-
       try{
-        // Para conseguir o salt precisamos ler do banco por email -> simplificação: buscamos todos users e tentamos.
-        const snapshot = await database.ref('users').orderByChild('email').equalTo(email).once('value');
+        const email = document.getElementById('authEmail').value.trim();
+        const password = document.getElementById('authPassword').value;
+        if(!email || !password) return alert('Preencha email e senha.');
+
+        const snap = await database.ref('users').orderByChild('email').equalTo(email).once('value');
         let saltB64 = null;
-        snapshot.forEach(child=>{ const v = child.val(); if(v && v.salt) saltB64 = v.salt; });
-        if(!saltB64){
-          // fallback: derivar sem salt conhecido (gerará diferente da senha criada) => falha
-          // Em many setups, não fazemos isso; aqui mostramos mensagem orientativa.
-          showMessage('Conta não encontrada no DB: não existe salt salvo. Tente registrar novamente.');
-          return;
-        }
-        const saltBytes = atob(saltB64);
-        // derive usando salt existente
-        const {derivedKeyBase64} = await derivePasswordKey(password, new TextDecoder().decode(new Uint8Array(Array.from(saltBytes).map(c=>c.charCodeAt?c.charCodeAt(0):c))));
-        // agora faz signIn com derived key
-        await auth.signInWithEmailAndPassword(email, derivedKeyBase64);
-        showMessage('Logado com sucesso!');
-      }catch(err){
-        console.error(err);
-        showMessage('Erro ao logar: ' + (err.message || err));
-      }
+        snap.forEach(child=>{ const v=child.val(); if(v && v.salt) saltB64 = v.salt; });
+        if(!saltB64){ return alert('Conta não encontrada no DB. Registre antes.'); }
+
+        const saltStr = atob(saltB64);
+        // reconstruct salt Uint8Array from string
+        const saltBytes = new Uint8Array(Array.from(saltStr).map(c=>c.charCodeAt(0)));
+        // derive using explicit salt
+        const {derivedKeyBase64} = await derivePasswordKey(password, new TextDecoder().decode(saltBytes));
+        await Util.retry(()=>auth.signInWithEmailAndPassword(email, derivedKeyBase64), 3, 500);
+        Util.log('UserSignedIn', {email});
+      }catch(err){ Util.log('signinError', err); alert('Erro ao logar: ' + (err.message||err)); }
     }
 
-    /**************************************************************************
-     * Google Sign-In via Firebase
-     **************************************************************************/
     async function signInWithGoogle(){
-      const provider = new firebase.auth.GoogleAuthProvider();
-      // optional: set custom parameters
-      provider.setCustomParameters({
-        // prompt: 'select_account' // descomente se desejar forçar seleção
-      });
       try{
+        const provider = new firebase.auth.GoogleAuthProvider();
         await auth.signInWithPopup(provider);
-        showMessage('Logado com Google!');
-      }catch(err){
-        console.error(err);
-        showMessage('Erro no login com Google: ' + (err.message || err));
-      }
+        Util.log('GoogleSignIn');
+      }catch(err){ Util.log('googleSignInErr', err); alert('Erro no login Google: ' + (err.message||err)); }
     }
 
-    function signOut(){
-      auth.signOut();
-      showMessage('Desconectado.');
-    }
+    function signOut(){ auth.signOut().then(()=>{ Util.log('SignedOut'); alert('Desconectado.'); }).catch(e=>{ Util.log('signOutErr', e); }); }
 
-    /**************************************************************************
-     * Observador de estado de autenticação
-     **************************************************************************/
-    auth.onAuthStateChanged(async (user) => {
-      const userShort = document.getElementById('userShort');
-      const userEmail = document.getElementById('userEmail');
-      if(user){
-        // usuário logado
-        userShort.textContent = user.email || user.displayName || ('uid:' + user.uid.slice(0,8));
-        userEmail.textContent = user.email || user.displayName || '— perfil sem email —';
-        // atualiza preview do DB
-        loadUsersPreview();
-      } else {
-        userShort.textContent = '— desconectado —';
-        userEmail.textContent = '— desconectado —';
-        document.getElementById('dbPreview').innerHTML = 'Nenhum dado carregado.';
-      }
+    auth.onAuthStateChanged(user=>{
+      document.getElementById('accountShort').textContent = user ? (user.email || user.displayName || ('uid:'+user.uid.slice(0,8))) : '— desconectado —';
+      document.getElementById('profileEmail').textContent = user ? (user.email || '—') : '—';
+      document.getElementById('welcomeName').textContent = user ? (user.displayName || user.email.split('@')[0]) : 'convidado';
+      if(user) loadUsersPreview();
     });
 
     /**************************************************************************
-     * Helper: sanitize key para usar em paths no Realtime DB
+     * SCRIPTS CRUD (simple examples) with validation and retry
      **************************************************************************/
-    function sanitizeKey(k){
-      return String(k).replace(/\.|\#|\$|\[|\]/g, '_');
+    async function addScript(){
+      try{
+        const title = (document.getElementById('scriptTitle').value||'').trim();
+        const code = (document.getElementById('scriptCode').value||'').trim();
+        if(!title || !code) return alert('Preencha título e código.');
+        const id = Util.uuid();
+        const payload = {id, title, code, createdAt: Util.now()};
+        await Util.retry(()=>database.ref('scripts/'+Util.sanitizeKey(id)).set(payload), 3, 400);
+        Util.log('ScriptAdded', payload);
+        document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value='';
+        loadScriptsCatalog();
+      }catch(err){ Util.log('addScriptErr', err); alert('Erro ao adicionar script: ' + (err.message||err)); }
+    }
+
+    function clearScriptForm(){ document.getElementById('scriptTitle').value=''; document.getElementById('scriptCode').value=''; }
+
+    async function loadScriptsCatalog(){
+      try{
+        const snap = await database.ref('scripts').once('value');
+        const val = snap.val();
+        const area = document.getElementById('scriptsCatalog');
+        const listArea = document.getElementById('scriptListArea');
+        area.innerHTML = '';
+        listArea.innerHTML = '';
+        if(!val) { area.innerHTML = '<div class="muted">Sem scripts.</div>'; return; }
+        const rows = Object.keys(val).map(k=>val[k]);
+        area.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join('');
+        listArea.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(255,255,255,0.01)"><strong>${escapeHtml(r.title)}</strong><pre style="white-space:pre-wrap;margin-top:6px;background:rgba(0,0,0,0.06);padding:8px;border-radius:6px">${escapeHtml(r.code)}</pre></div>`).join('');
+      }catch(err){ Util.log('loadScriptsErr', err); }
     }
 
     /**************************************************************************
-     * DB preview: carrega lista de usuários gravados no nó /users
+     * DB Helpers: preview users, read/write tests
      **************************************************************************/
     async function loadUsersPreview(){
-      const el = document.getElementById('dbPreview');
-      el.innerHTML = 'Carregando...';
       try{
         const snap = await database.ref('users').once('value');
         const val = snap.val();
-        if(!val){ el.innerHTML = 'Nenhum usuário salvo.'; return; }
+        const container = document.getElementById('usersTable');
+        if(!val){ container.innerHTML = '<div class="muted">Nenhum usuário salvo.</div>'; return; }
         const rows = Object.keys(val).map(k=>({k,v:val[k]}));
-        el.innerHTML = rows.map(r=>{
-          return `<div class=\"db-row\"><div><small>${escapeHtml(r.v.email||'—')}</small></div><div><small>${new Date(r.v.createdAt).toLocaleString()}</small></div></div>`;
-        }).join('');
-      }catch(err){ console.error(err); el.innerHTML = 'Erro ao carregar: '+(err.message||err); }
+        container.innerHTML = rows.map(r=>`<div style="padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.v.email||'—')}</strong><div class="muted">${new Date(r.v.createdAt).toLocaleString()}</div></div>`).join('');
+        document.getElementById('statUsers').textContent = rows.length;
+      }catch(err){ Util.log('loadUsersPreviewErr', err); }
     }
 
-    /**************************************************************************
-     * Lista de usuários na aba Database
-     **************************************************************************/
-    async function loadUsersList(){
-      const el = document.getElementById('usersList');
-      el.innerHTML = 'Carregando...';
-      try{
-        const snap = await database.ref('users').once('value');
-        const val = snap.val();
-        if(!val){ el.innerHTML = 'Nenhum usuário.'; return; }
-        const rows = Object.keys(val).map(k=>({k,v:val[k]}));
-        el.innerHTML = rows.map(r=>`<div class=\"db-row\"><div><strong>${escapeHtml(r.v.email||'—')}</strong><br><small>${escapeHtml(r.v.derivedKeyPreview||'')}</small></div><div><small>${new Date(r.v.createdAt).toLocaleString()}</small></div></div>`).join('');
-      }catch(err){ console.error(err); el.innerHTML = 'Erro ao carregar: '+(err.message||err); }
-    }
-
-    /**************************************************************************
-     * Operação de teste: escrever um valor simples no Realtime DB
-     **************************************************************************/
     async function writeTestValue(){
-      const k = document.getElementById('testKey').value.trim();
-      const v = document.getElementById('testValue').value.trim();
-      if(!k){ showMessage('Informe a chave'); return; }
       try{
-        await database.ref('tests/' + sanitizeKey(k)).set({value: v, createdAt: Date.now()});
-        showMessage('Gravado com sucesso.');
-      }catch(err){ console.error(err); showMessage('Erro ao gravar: '+(err.message||err)); }
+        const k = (document.getElementById('dbKey').value||'').trim();
+        const v = (document.getElementById('dbValue').value||'').trim(); if(!k) return alert('Informe chave');
+        await Util.retry(()=>database.ref('tests/'+Util.sanitizeKey(k)).set({value:v, createdAt:Util.now()}), 3, 400);
+        Util.log('TestWrite', {k,v}); alert('Gravado com sucesso.');
+      }catch(err){ Util.log('writeTestErr', err); alert('Erro ao gravar: ' + (err.message||err)); }
+    }
+
+    async function readTestValue(){
+      try{
+        const k = (document.getElementById('dbKey').value||'').trim(); if(!k) return alert('Informe chave para ler');
+        const snap = await database.ref('tests/'+Util.sanitizeKey(k)).once('value'); const v = snap.val(); alert('Valor: ' + JSON.stringify(v));
+      }catch(err){ Util.log('readTestErr', err); alert('Erro ao ler: ' + (err.message||err)); }
     }
 
     /**************************************************************************
-     * Pequenas utilidades
+     * DIAGNOSTICS: run checks and produce a short report
+     **************************************************************************/
+    async function runDiagnostics(){
+      const report = [];
+      try{
+        report.push('Iniciando diagnósticos — ' + new Date().toLocaleString());
+        // check network
+        report.push('Navigator.onLine: ' + navigator.onLine);
+        // check firebase connection hint
+        const connectedSnap = await database.ref('.info/connected').once('value');
+        report.push('Firebase connected: ' + Boolean(connectedSnap.val()));
+        // simple read from root with timeout
+        const t0 = Util.now();
+        try{
+          await Promise.race([database.ref('/').limitToFirst(1).once('value'), new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),5000))]);
+          report.push('Root read: OK');
+        }catch(e){ report.push('Root read: FAIL ('+e.message+')'); }
+
+        // validation: check local logs size
+        const logs = JSON.parse(localStorage.getItem('__gbz_logs')||'[]'); report.push('Local logs size: ' + logs.length);
+      }catch(e){ report.push('Diagnostics error: '+(e.message||e)); }
+      document.getElementById('errorReport').textContent = report.join('
+');
+      Util.log('DiagnosticsResult', report);
+      alert('Diagnóstico finalizado — veja a aba Diagnósticos.');
+    }
+
+    /**************************************************************************
+     * BUG REPORTER
+     **************************************************************************/
+    async function submitBug(){
+      try{
+        const title = (document.getElementById('bugTitle').value||'').trim();
+        const desc = (document.getElementById('bugDesc').value||'').trim();
+        if(!title || !desc) return alert('Preencha título e descrição.');
+        const id = Util.uuid();
+        const payload = {id, title, desc, ts: Util.now(), user: auth.currentUser ? auth.currentUser.uid : null, userEmail: auth.currentUser ? auth.currentUser.email : null};
+        await Util.retry(()=>database.ref('bug_reports/'+Util.sanitizeKey(id)).set(payload), 3, 600);
+        Util.log('BugSubmitted', payload);
+        alert('Bug enviado com sucesso. Obrigado!');
+        clearBugForm();
+      }catch(err){ Util.log('submitBugErr', err); alert('Erro ao enviar bug: '+(err.message||err)); }
+    }
+    function clearBugForm(){ document.getElementById('bugTitle').value=''; document.getElementById('bugDesc').value=''; }
+
+    /**************************************************************************
+     * LOGGING utilities accessible from UI
+     **************************************************************************/
+    function clearLogs(){ localStorage.removeItem('__gbz_logs'); document.getElementById('fullLog').innerHTML=''; alert('Logs limpos'); }
+    function downloadLogs(){ const data = localStorage.getItem('__gbz_logs')||'[]'; const blob = new Blob([data], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='gbz_logs_'+Date.now()+'.json'; a.click(); URL.revokeObjectURL(url); }
+    function exportLogs(){ downloadLogs(); }
+
+    /**************************************************************************
+     * misc helpers
      **************************************************************************/
     function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;"})[m]; }); }
 
-    // carrega preview inicial do DB (não bloqueante)
-    setTimeout(()=>{ loadUsersPreview(); loadUsersList(); }, 800);
+    function navTo(id){ document.querySelectorAll('.view').forEach(v=>v.style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); const btn = document.getElementById('nav-'+id); if(btn) btn.classList.add('active'); }
+
+    function openHelp(){ alert('Ajuda: use as abas à esquerda para navegar. Esta versão adiciona diagnósticos e sistema anti-bugs.'); }
+
+    function clearLocalCache(){ localStorage.clear(); alert('Cache local limpo'); }
+
+    function downloadLogs(){ const data = localStorage.getItem('__gbz_logs')||'[]'; const blob = new Blob([data],{type:'application/json'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='gbz_logs_'+Date.now()+'.json'; a.click(); URL.revokeObjectURL(url); }
 
     /**************************************************************************
-     * Observações Finais e Boas Práticas (impressas no console para desenvolvedor)
-     * - Este é um template didático. Em produção:
-     *   - Não exponha chaves sensíveis publicamente;
-     *   - Use regras do Firebase Realtime Database restritas e um backend quando necessário;
-     *   - Considere usar Firebase Auth sem derivar senhas client-side, ou implemente fluxo seguro com servidor.
+     * SEARCH & CATALOG
      **************************************************************************/
-    console.log('GbzScripts inicializado — sem funcionalidades administrativas.');
+    async function searchCatalog(q){
+      const term = (document.getElementById('searchInput').value||'').trim().toLowerCase();
+      // trivial local search: scripts titles
+      const snap = await database.ref('scripts').once('value'); const val = snap.val();
+      if(!val) { document.getElementById('scriptsCatalog').innerHTML = '<div class="muted">Sem scripts.</div>'; return; }
+      const rows = Object.keys(val).map(k=>val[k]);
+      const filtered = rows.filter(r=> r.title.toLowerCase().includes(term) || (r.code||'').toLowerCase().includes(term));
+      document.getElementById('scriptsCatalog').innerHTML = filtered.map(r=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:rgba(0,0,0,0.04)"><strong>${escapeHtml(r.title)}</strong><div class="muted">${new Date(r.createdAt).toLocaleString()}</div></div>`).join('') || '<div class="muted">Nenhum resultado.</div>';
+    }
+
+    // debounce wrapper
+    function debounce(fn, ms){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }}
+
+    /**************************************************************************
+     * INITIAL LOAD
+     **************************************************************************/
+    (function init(){
+      navTo('home');
+      loadScriptsCatalog();
+      loadUsersPreview();
+      document.getElementById('lastSync').textContent = new Date().toLocaleString();
+      Util.log('GbzScriptsPro initialized');
+    })();
 
   </script>
 

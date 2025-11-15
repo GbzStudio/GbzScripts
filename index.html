@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GbzScripts — Menu Principal</title>
+  <meta name="description" content="GbzScripts - site com menu completo, login (email + Google) e banco Firebase. Sem nada relacionado a admin." />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset minimal */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,#081024 0%, #071328 40%, #0b1b2f 100%);
+      color:#e6f0ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+      padding:28px;
+    }
+
+    /* Container */
+    .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:28px;align-items:start}
+
+    /* Sidebar menu */
+    .sidebar{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px);
+      box-shadow: 0 8px 24px rgba(2,6,23,0.6);
+      min-height:560px;
+    }
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#7c5cff,#3dd3ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#021428;font-size:20px}
+    .brand h1{font-size:20px;margin-bottom:2px}
+    .brand p{font-size:12px;color:rgba(230,240,255,0.7)}
+
+    .menu-list{margin-top:14px}
+    .menu-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;cursor:pointer;margin-bottom:10px}
+    .menu-item:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    .menu-item .icon{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .menu-item .label{font-weight:600}
+    .menu-item .hint{font-size:12px;color:rgba(230,240,255,0.6)}
+
+    .sidebar .section{margin-top:18px}
+    .section h3{font-size:13px;color:rgba(230,240,255,0.85);margin-bottom:8px}
+
+    /* Main content */
+    .main{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.04);min-height:560px;backdrop-filter: blur(6px);
+    }
+
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .hero .title{font-size:22px;font-weight:700}
+    .hero p{color:rgba(230,240,255,0.75);font-size:13px}
+
+    .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .card h4{font-size:15px;margin-bottom:8px}
+    .muted{font-size:13px;color:rgba(230,240,255,0.7)}
+
+    /* Login box */
+    .auth-box{display:flex;flex-direction:column;gap:10px}
+    .input{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);color:#eaf6ff}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,#5b8cff,#5dffdf);color:#021428}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
+
+    .small{font-size:13px}
+    .note{font-size:12px;color:rgba(230,240,255,0.6)}
+
+    /* Responsive */
+    @media (max-width:940px){
+      .wrap{grid-template-columns:1fr;}
+      .logo{width:44px;height:44px}
+    }
+
+    /* footer */
+    footer{margin-top:18px;text-align:center;color:rgba(230,240,255,0.6);font-size:13px}
+
+    /* decorative */
+    .sep{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.02),transparent);margin:12px 0;border-radius:2px}
+
+    /* users list in DB preview */
+    .db-preview{max-height:160px;overflow:auto;padding-right:6px}
+    .db-row{display:flex;justify-content:space-between;padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.07)}
+    .db-row small{opacity:0.85}
+
+    /* big welcome */
+    .welcome-big{font-family:'JetBrains Mono', monospace;font-size:18px;letter-spacing:0.6px}
+
+    /* tooltip-ish */
+    .hint-box{padding:10px;border-radius:8px;border:1px dashed rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
+
+  </style>
+
+  <!-- Scrypt-js (client-side scrypt) CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/scrypt-js@3.0.1/scrypt.min.js"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+</head>
+<body>
+  <div class="wrap">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">Gbz</div>
+        <div>
+          <h1>GbzScripts</h1>
+          <p>Menu interativo • Scripts • Demos</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Menu</h3>
+        <div class="menu-list">
+          <div class="menu-item" data-target="home" onclick="openTab('home')">
+            <div class="icon">🏠</div>
+            <div>
+              <div class="label">Início</div>
+              <div class="hint">Visão geral</div>
+            </div>
+          </div>
+
+          <div class="menu-item" data-target="scripts" onclick="openTab('scripts')">
+            <div class="icon">📜</div>
+            <div>
+              <div class="label">Scripts</div>
+              <div class="hint">Coleções e demos</div>
+            </div>
+          </div>
+
+          <div class="menu-item" data-target="login" onclick="openTab('login')">
+            <div class="icon">🔐</div>
+            <div>
+              <div class="label">Login</div>
+              <div class="hint">Entrar com email ou Google</div>
+            </div>
+          </div>
+
+          <div class="menu-item" data-target="database" onclick="openTab('database')">
+            <div class="icon">🗄️</div>
+            <div>
+              <div class="label">Banco</div>
+              <div class="hint">Preview do Realtime DB</div>
+            </div>
+          </div>
+
+          <div class="menu-item" data-target="about" onclick="openTab('about')">
+            <div class="icon">❓</div>
+            <div>
+              <div class="label">Sobre</div>
+              <div class="hint">Informações e licenças</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Conta</h3>
+        <div class="hint-box" style="margin-top:8px">
+          <div class="small">Nenhuma função de administrador. Sem privilégios especiais. Projeto público / educacional.</div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div style="margin-top:10px">
+          <div class="small">Conectado como:</div>
+          <div id="userShort" style="margin-top:10px;font-weight:700">— desconectado —</div>
+        </div>
+
+      </div>
+
+      <footer style="margin-top:18px">
+        <div class="small">Feito por Gbz • <small style="opacity:0.8">Sem elementos de admin</small></div>
+      </footer>
+    </aside>
+
+    <main class="main">
+      <div id="home" class="tab">
+        <div class="hero">
+          <div>
+            <div class="title">Bem-vindo ao <span class="welcome-big">GbzScripts</span></div>
+            <p>Este é um template completo com menu, autenticação (email + Google) e integração básica com Firebase Realtime Database. Tudo sem administrativas.</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="openTab('login')">Entrar / Registrar</button>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <h4>Visão Geral</h4>
+            <p class="muted">Interface responsiva, login com hash scrypt client-side, Google Sign-In via Firebase Auth, dados armazenados no Realtime Database. Tudo em um arquivo para deploy rápido no GitHub Pages.</p>
+          </div>
+
+          <div class="card">
+            <h4>Demonstrações</h4>
+            <p class="muted">Inclui espaço para listar scripts, pré-visualizar configurações e testar conexões com banco em tempo real.</p>
+          </div>
+
+          <div class="card">
+            <h4>Segurança</h4>
+            <p class="muted">Este template usa scrypt para derivar uma chave do password no cliente antes de enviar ao Firebase Auth (isto é apenas um exemplo técnico — normalmente recomendo usar mecanismos server-side para maior segurança).</p>
+          </div>
+
+          <div class="card">
+            <h4>Deploy</h4>
+            <p class="muted">Basta criar um repositório no GitHub com este arquivo <code>index.html</code> na branch <code>main</code> e ativar GitHub Pages.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="scripts" class="tab" style="display:none">
+        <h3>Scripts e Recursos</h3>
+        <p class="muted">Área para colocar suas coleções de scripts, demos e links. Este template mostra exemplos, você pode extender como quiser.</p>
+        <div style="margin-top:12px">
+          <div class="card">
+            <h4>Script: Clicker Demo</h4>
+            <pre style="white-space:pre-wrap;font-size:13px;margin-top:8px;background:rgba(0,0,0,0.06);padding:12px;border-radius:8px;color:#dff6ff">// Exemplo simples de script
+function demoClicker(){
+  let clicks = 0;
+  return {
+    click(){ clicks++; return clicks; },
+    get(){ return clicks }
+  }
+}
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="login" class="tab" style="display:none">
+        <h3>Login / Registro</h3>
+        <p class="muted">Você pode criar uma conta com email/senha (senha é derivada via scrypt no cliente) ou entrar com Google.</p>
+
+        <div style="display:flex;gap:18px;margin-top:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:280px">
+            <div class="card">
+              <h4>Entrar com Email</h4>
+              <div class="auth-box" style="margin-top:8px">
+                <input id="email" class="input" placeholder="seu@email.com" />
+                <input id="password" type="password" class="input" placeholder="Senha" />
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn btn-primary" onclick="handleSignIn()">Entrar</button>
+                  <button class="btn btn-ghost" onclick="handleRegister()">Registrar</button>
+                </div>
+                <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+                  <button class="btn btn-ghost" onclick="signInWithGoogle()">Entrar com Google</button>
+                  <div class="note">Usa OAuth via Firebase</div>
+                </div>
+                <div style="margin-top:10px" class="note">Observação: Senhas são processadas por scrypt antes de serem enviadas ao Firebase (derivação client-side). Isso é apenas um exemplo técnico — para produção, prefira proteger segredos no servidor.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;min-width:260px">
+            <div class="card">
+              <h4>Estado da conta</h4>
+              <div style="margin-top:8px">
+                <div class="small">Usuário: <span id="userEmail">— desconectado —</span></div>
+                <div style="margin-top:8px">
+                  <button class="btn btn-ghost" onclick="signOut()">Sair</button>
+                </div>
+                <div class="sep"></div>
+                <div class="db-preview" id="dbPreview">Carregando preview do DB...</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="database" class="tab" style="display:none">
+        <h3>Preview do Realtime Database</h3>
+        <p class="muted">Mostramos alguns nós públicos para testes. Este app usa permissões padrão do projeto; verifique seu console do Firebase para regras reais.</p>
+        <div style="margin-top:12px">
+          <div class="card">
+            <h4>Usuários Registrados</h4>
+            <div class="db-preview" id="usersList"></div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h4>Operações de Teste</h4>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <input id="testKey" class="input" placeholder="chave" style="flex:1" />
+              <input id="testValue" class="input" placeholder="valor" style="flex:1" />
+              <button class="btn btn-primary" onclick="writeTestValue()">Gravar</button>
+            </div>
+            <div class="note" style="margin-top:8px">Exemplo: grava no nó /tests/{chave}.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="about" class="tab" style="display:none">
+        <h3>Sobre</h3>
+        <p class="muted">Template criado para fins educacionais e demonstrativos. Tudo sem funcionalidades administrativas.</p>
+        <div style="margin-top:12px">
+          <div class="card">
+            <h4>Licença</h4>
+            <p class="muted">Sinta-se livre para adaptar e usar. Não inclua informações sensíveis públicas sem proteção.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    /**************************************************************************
+     * CONFIGURAÇÕES SOLICITADAS PELO USUÁRIO
+     * - hash_config: objeto com parâmetros SCRYPT (apenas informativo/usado pelo scrypt-js)
+     * - google client id: usado para provedor Google (Firebase configura automaticamente)
+     * - firebaseConfig: configuração do projeto Firebase para inicialização
+     **************************************************************************/
+
+    const hash_config = {
+      algorithm: 'SCRYPT',
+      base64_signer_key: 'rvFvAj6xFNxBOTzmbjuk4FdDz5btzfPFIVNYdotfY7moes/lEFzF35stNcDwCxkuRy+mlem5rTfm5e+DgsGy7A==',
+      base64_salt_separator: 'Bw==',
+      rounds: 8,
+      mem_cost: 14
+    };
+
+    // Google OAuth client ID fornecido
+    const GOOGLE_CLIENT_ID = '873308453565-kccd4pmdru85pp0iiii9n807o72rnr64.apps.googleusercontent.com';
+
+    // Firebase configuration fornecida pelo usuário
+    const firebaseConfig = {
+      apiKey: "AIzaSyALpPt-tUWB0Gq-UeJXOJRRkyt0si8s4Nc",
+      authDomain: "fir-auth-3521c.firebaseapp.com",
+      databaseURL: "https://fir-auth-3521c-default-rtdb.firebaseio.com",
+      projectId: "fir-auth-3521c",
+      storageBucket: "fir-auth-3521c.firebasestorage.app",
+      messagingSenderId: "873308453565",
+      appId: "1:873308453565:web:4ff8d9863adb1eae1c95d4",
+      measurementId: "G-LWMZJ55W7N"
+    };
+
+    /**************************************************************************
+     * Inicialização do Firebase (compat mode usado para simplicidade em um único arquivo)
+     **************************************************************************/
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    /**************************************************************************
+     * Utility: convert base64 to Uint8Array (usado pelo scrypt-js)
+     **************************************************************************/
+    function base64ToUint8Array(base64) {
+      const binary = atob(base64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+
+    /**************************************************************************
+     * Deriva senha com scrypt-js
+     * - scrypt(params): N, r, p (work factor / mem)
+     * - Aqui usamos uma interpretação simples dos parâmetros rounds/mem_cost
+     * - Este é um exemplo educacional: em produção, trate segredos com mais cuidado.
+     **************************************************************************/
+    async function derivePasswordKey(password, saltText = null) {
+      // converte string para bytes
+      const pwBytes = new TextEncoder().encode(password);
+      // se não tiver salt, gera um aleatório
+      let salt;
+      if (saltText) {
+        salt = new TextEncoder().encode(saltText);
+      } else {
+        salt = crypto.getRandomValues(new Uint8Array(16));
+      }
+
+      // parâmetros: usamos mem_cost como log2(N) e rounds como p (paralelism)
+      const N = Math.pow(2, Math.max(1, (hash_config.mem_cost || 14)));
+      const r = 8; // bloco
+      const p = Math.max(1, (hash_config.rounds || 1));
+      const dkLen = 64; // bytes de saída
+
+      // scrypt-js usa scrypt(password, salt, N, r, p, dkLen, callback)
+      return new Promise((resolve, reject) => {
+        scrypt(pwBytes, salt, N, r, p, dkLen, function(error, progress, key){
+          if (error) return reject(error);
+          if (key) {
+            // key é uma Uint8Array
+            const b64 = btoa(String.fromCharCode.apply(null, Array.from(key)));
+            resolve({derivedKeyBase64: b64, saltBase64: btoa(String.fromCharCode.apply(null, Array.from(salt)))});
+          }
+        });
+      });
+    }
+
+    /**************************************************************************
+     * UI helpers
+     **************************************************************************/
+    function openTab(id){
+      document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
+      const el = document.getElementById(id);
+      if(el) el.style.display='block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    openTab('home');
+
+    function showMessage(msg){
+      alert(msg);
+    }
+
+    /**************************************************************************
+     * Auth: registrar e logar com senha derivada localmente via scrypt
+     * Observação importante:
+     * - Derivamos uma chave com scrypt e a usamos como "senha" ao criar a conta Firebase.
+     * - Isso significa que a senha armazenada pelo Firebase é o resultado do derivation —
+     *   para autenticar, derivamos novamente e usamos o mesmo valor.
+     * - Este padrão é apenas um exemplo técnico (client-side scrypt). Em produção, prefira enviar via HTTPS ao servidor e usar rotinas server-side seguras.
+     **************************************************************************/
+
+    async function handleRegister(){
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      if(!email || !password){ showMessage('Preencha email e senha.'); return; }
+
+      try{
+        // derivar
+        const {derivedKeyBase64, saltBase64} = await derivePasswordKey(password);
+        // usa derivedKeyBase64 como senha para Firebase Auth
+        const userCred = await auth.createUserWithEmailAndPassword(email, derivedKeyBase64);
+        const user = userCred.user;
+        // salva metadados no Realtime DB
+        await database.ref('users/' + sanitizeKey(user.uid)).set({
+          email: email,
+          createdAt: Date.now(),
+          salt: saltBase64,
+          derivedKeyPreview: derivedKeyBase64.slice(0,24) + '...'
+        });
+        showMessage('Conta criada com sucesso!');
+      }catch(err){
+        console.error(err);
+        showMessage('Erro ao registrar: ' + (err.message || err));
+      }
+    }
+
+    async function handleSignIn(){
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      if(!email || !password){ showMessage('Preencha email e senha.'); return; }
+
+      try{
+        // Para conseguir o salt precisamos ler do banco por email -> simplificação: buscamos todos users e tentamos.
+        const snapshot = await database.ref('users').orderByChild('email').equalTo(email).once('value');
+        let saltB64 = null;
+        snapshot.forEach(child=>{ const v = child.val(); if(v && v.salt) saltB64 = v.salt; });
+        if(!saltB64){
+          // fallback: derivar sem salt conhecido (gerará diferente da senha criada) => falha
+          // Em many setups, não fazemos isso; aqui mostramos mensagem orientativa.
+          showMessage('Conta não encontrada no DB: não existe salt salvo. Tente registrar novamente.');
+          return;
+        }
+        const saltBytes = atob(saltB64);
+        // derive usando salt existente
+        const {derivedKeyBase64} = await derivePasswordKey(password, new TextDecoder().decode(new Uint8Array(Array.from(saltBytes).map(c=>c.charCodeAt?c.charCodeAt(0):c))));
+        // agora faz signIn com derived key
+        await auth.signInWithEmailAndPassword(email, derivedKeyBase64);
+        showMessage('Logado com sucesso!');
+      }catch(err){
+        console.error(err);
+        showMessage('Erro ao logar: ' + (err.message || err));
+      }
+    }
+
+    /**************************************************************************
+     * Google Sign-In via Firebase
+     **************************************************************************/
+    async function signInWithGoogle(){
+      const provider = new firebase.auth.GoogleAuthProvider();
+      // optional: set custom parameters
+      provider.setCustomParameters({
+        // prompt: 'select_account' // descomente se desejar forçar seleção
+      });
+      try{
+        await auth.signInWithPopup(provider);
+        showMessage('Logado com Google!');
+      }catch(err){
+        console.error(err);
+        showMessage('Erro no login com Google: ' + (err.message || err));
+      }
+    }
+
+    function signOut(){
+      auth.signOut();
+      showMessage('Desconectado.');
+    }
+
+    /**************************************************************************
+     * Observador de estado de autenticação
+     **************************************************************************/
+    auth.onAuthStateChanged(async (user) => {
+      const userShort = document.getElementById('userShort');
+      const userEmail = document.getElementById('userEmail');
+      if(user){
+        // usuário logado
+        userShort.textContent = user.email || user.displayName || ('uid:' + user.uid.slice(0,8));
+        userEmail.textContent = user.email || user.displayName || '— perfil sem email —';
+        // atualiza preview do DB
+        loadUsersPreview();
+      } else {
+        userShort.textContent = '— desconectado —';
+        userEmail.textContent = '— desconectado —';
+        document.getElementById('dbPreview').innerHTML = 'Nenhum dado carregado.';
+      }
+    });
+
+    /**************************************************************************
+     * Helper: sanitize key para usar em paths no Realtime DB
+     **************************************************************************/
+    function sanitizeKey(k){
+      return String(k).replace(/\.|\#|\$|\[|\]/g, '_');
+    }
+
+    /**************************************************************************
+     * DB preview: carrega lista de usuários gravados no nó /users
+     **************************************************************************/
+    async function loadUsersPreview(){
+      const el = document.getElementById('dbPreview');
+      el.innerHTML = 'Carregando...';
+      try{
+        const snap = await database.ref('users').once('value');
+        const val = snap.val();
+        if(!val){ el.innerHTML = 'Nenhum usuário salvo.'; return; }
+        const rows = Object.keys(val).map(k=>({k,v:val[k]}));
+        el.innerHTML = rows.map(r=>{
+          return `<div class=\"db-row\"><div><small>${escapeHtml(r.v.email||'—')}</small></div><div><small>${new Date(r.v.createdAt).toLocaleString()}</small></div></div>`;
+        }).join('');
+      }catch(err){ console.error(err); el.innerHTML = 'Erro ao carregar: '+(err.message||err); }
+    }
+
+    /**************************************************************************
+     * Lista de usuários na aba Database
+     **************************************************************************/
+    async function loadUsersList(){
+      const el = document.getElementById('usersList');
+      el.innerHTML = 'Carregando...';
+      try{
+        const snap = await database.ref('users').once('value');
+        const val = snap.val();
+        if(!val){ el.innerHTML = 'Nenhum usuário.'; return; }
+        const rows = Object.keys(val).map(k=>({k,v:val[k]}));
+        el.innerHTML = rows.map(r=>`<div class=\"db-row\"><div><strong>${escapeHtml(r.v.email||'—')}</strong><br><small>${escapeHtml(r.v.derivedKeyPreview||'')}</small></div><div><small>${new Date(r.v.createdAt).toLocaleString()}</small></div></div>`).join('');
+      }catch(err){ console.error(err); el.innerHTML = 'Erro ao carregar: '+(err.message||err); }
+    }
+
+    /**************************************************************************
+     * Operação de teste: escrever um valor simples no Realtime DB
+     **************************************************************************/
+    async function writeTestValue(){
+      const k = document.getElementById('testKey').value.trim();
+      const v = document.getElementById('testValue').value.trim();
+      if(!k){ showMessage('Informe a chave'); return; }
+      try{
+        await database.ref('tests/' + sanitizeKey(k)).set({value: v, createdAt: Date.now()});
+        showMessage('Gravado com sucesso.');
+      }catch(err){ console.error(err); showMessage('Erro ao gravar: '+(err.message||err)); }
+    }
+
+    /**************************************************************************
+     * Pequenas utilidades
+     **************************************************************************/
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":"&#39;"})[m]; }); }
+
+    // carrega preview inicial do DB (não bloqueante)
+    setTimeout(()=>{ loadUsersPreview(); loadUsersList(); }, 800);
+
+    /**************************************************************************
+     * Observações Finais e Boas Práticas (impressas no console para desenvolvedor)
+     * - Este é um template didático. Em produção:
+     *   - Não exponha chaves sensíveis publicamente;
+     *   - Use regras do Firebase Realtime Database restritas e um backend quando necessário;
+     *   - Considere usar Firebase Auth sem derivar senhas client-side, ou implemente fluxo seguro com servidor.
+     **************************************************************************/
+    console.log('GbzScripts inicializado — sem funcionalidades administrativas.');
+
+  </script>
+
+</body>
+</html>

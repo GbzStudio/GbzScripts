@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chatbot Gemini Test — Local</title>
+  <style>
+    body { font-family: Arial; background:#f6f7fb; margin:0; display:flex; justify-content:center; padding:20px; }
+    .box { width:100%; max-width:900px; background:white; border-radius:10px; padding:20px; box-shadow:0 0 20px rgba(0,0,0,.08); }
+    #chat { height:60vh; overflow:auto; padding:10px; border:1px solid #eee; border-radius:10px; background:#fafafa; }
+    .msg { margin:10px 0; }
+    .user { text-align:right; }
+    .bubble { display:inline-block; padding:10px 14px; border-radius:10px; max-width:75%; }
+    .bubble.user { background:#0b84ff; color:white; }
+    .bubble.bot { background:#eaefff; }
+    form { display:flex; gap:10px; margin-top:15px; }
+    input { flex:1; padding:10px; border-radius:10px; border:1px solid #ccc; }
+    button { padding:10px 20px; border:0; border-radius:10px; background:#0b84ff; color:white; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>💬 Chatbot — Gemini 2.5 Flash</h2>
+    <small>Rodando localmente — sua API Key está protegida no servidor.</small>
+
+    <div id="chat"></div>
+
+    <form id="form">
+      <input id="input" placeholder="Digite sua mensagem..." required />
+      <button>Enviar</button>
+    </form>
+  </div>
+
+<script>
+const chat = document.querySelector('#chat');
+const form = document.querySelector('#form');
+const input = document.querySelector('#input');
+
+function add(text, who="bot") {
+  const div = document.createElement("div");
+  div.className = "msg " + who;
+  div.innerHTML = `<div class="bubble ${who}">${text}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = input.value.trim();
+  input.value = "";
+  add(text, "user");
+  add("Pensando...", "bot");
+  
+  const res = await fetch("/api/chat", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ message:text })
+  });
+
+  const data = await res.json();
+  
+  const last = document.querySelector(".msg.bot:last-child .bubble");
+  last.innerText = data.reply || "[sem resposta]";
+});
+</script>
+</body>
+</html>
